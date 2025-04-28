@@ -1,0 +1,36 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "prepare": "npx nuxi prepare",
+    "backend": "node start-backend.js",
+    "frontend": "node start-frontend.js",
+    "start": "node server.js",
+    "clean": "rm -rf .nuxt node_modules/.vite node_modules/.cache .output dist"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.11.0",
+    "bcrypt": "^5.1.1",
+    "bootstrap": "^5.3.5",
+    "bootstrap-icons": "^1.11.3",
+    "bootstrap-vue-3": "^0.5.1",
+    "chart.js": "^4.4.9",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.0",
+    "formidable": "^3.5.4",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nuxt": "^3.7.4",
+    "pinia": "^2.1.7",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.5"
+  }
+}
