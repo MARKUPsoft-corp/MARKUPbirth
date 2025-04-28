@@ -50,44 +50,42 @@
         class="message-card"
       >
         <div class="message-header">
+          <div class="header-gradient"></div>
           <div class="user-info">
             <div class="user-avatar">{{ message.username.charAt(0).toUpperCase() }}</div>
-            <h4>{{ message.username }}</h4>
-          </div>
-          <div class="message-date">
-            <span class="date-full">{{ formatDate(message.createdAt) }}</span>
-            <span class="date-relative">{{ formatTimeAgo(message.createdAt) }}</span>
-          </div>
-        </div>
-        
-        <div class="message-body">
-          <p>{{ message.message }}</p>
-        </div>
-        
-        <div v-if="message.photoPath" class="message-image-container">
-          <div class="message-image-wrapper" @click="openLightbox(message)">
-            <img 
-              :src="`${apiBaseUrl}${message.photoPath}`" 
-              :alt="`Photo de ${message.username}`" 
-              class="message-image"
-              loading="lazy"
-            />
-            <div class="image-overlay">
-              <i class="bi bi-eye"></i>
+            <div class="user-name-date">
+              <h4>{{ message.username }}</h4>
+              <div class="time-info">
+                <span class="message-date">{{ formatDate(message.createdAt) }}</span>
+                <span class="message-time">· {{ formatTimeAgo(message.createdAt) }}</span>
+              </div>
             </div>
           </div>
         </div>
         
-        <div class="message-footer">
-          <button 
-            @click="likeMessage(message.id)" 
-            class="like-button"
-            :class="{ 'liked': userLikedMessages.includes(message.id) }"
-            :disabled="userLikedMessages.includes(message.id)"
-          >
-            <i class="bi bi-heart-fill"></i>
-            <span>{{ message.likes || 0 }}</span>
-          </button>
+        <div class="message-content">
+          <div class="message-body">
+            <p>{{ message.message }}</p>
+          </div>
+          
+          <div v-if="message.photoPath" class="message-image-container">
+            <a :href="`${apiBaseUrl}${message.photoPath}`" target="_blank" class="photo-button">
+              <i class="bi bi-image"></i>
+              <span>Voir la photo de {{ message.username }}</span>
+            </a>
+          </div>
+          
+          <div class="message-footer">
+            <button 
+              @click="likeMessage(message.id)" 
+              class="like-button"
+              :class="{ 'liked': userLikedMessages.includes(message.id) }"
+              :disabled="userLikedMessages.includes(message.id)"
+            >
+              <i class="bi bi-heart-fill"></i>
+              <span>{{ message.likes || 0 }} J'aime</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -240,6 +238,20 @@ const closeLightbox = () => {
   background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.list-header h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary-green), var(--primary-orange));
+  border-radius: 3px;
 }
 
 .sort-controls {
@@ -354,137 +366,188 @@ const closeLightbox = () => {
 .messages-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .messages-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .messages-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@media (min-width: 1500px) {
+  .messages-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .message-card {
   background: white;
-  border-radius: 15px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  width: 100%;
 }
 
 .message-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
 }
 
 .message-header {
-  padding: 1.2rem 1.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  height: 100px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+  padding: 0;
+  overflow: hidden;
+}
+
+.header-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--primary-green), var(--primary-orange));
+  z-index: 1;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  padding: 0 1.5rem 1.5rem;
+  position: relative;
+  z-index: 2;
+  width: 100%;
 }
 
 .user-avatar {
-  width: 36px;
-  height: 36px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
-  color: white;
+  background: white;
+  color: var(--primary-green);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 1.6rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border: 3px solid white;
+  margin-right: 1rem;
+}
+
+.user-name-date {
+  color: white;
+}
+
+.time-info {
+  display: flex;
+  align-items: center;
 }
 
 .user-info h4 {
   margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #333;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.25rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .message-date {
   font-size: 0.85rem;
-  color: #6c757d;
+  opacity: 0.9;
+}
+
+.message-time {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-left: 3px;
+}
+
+.message-content {
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  text-align: right;
-}
-
-.date-full {
-  display: none;
-}
-
-.date-relative {
-  font-size: 0.8rem;
+  gap: 1.2rem;
 }
 
 .message-body {
-  padding: 1.2rem 1.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .message-body p {
   margin: 0;
-  color: #333;
-  line-height: 1.6;
-  font-size: 1rem;
+  color: #2d3748;
+  line-height: 1.8;
+  font-size: 1.05rem;
+  background: #f9fafc;
+  padding: 1.2rem;
+  border-radius: 12px;
+  border-top-left-radius: 0;
+  position: relative;
+}
+
+.message-body p::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 30px;
+  background: linear-gradient(to bottom, var(--primary-green), var(--primary-orange));
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 .message-image-container {
   width: 100%;
+  margin-top: 0.5rem;
 }
 
-.message-image-wrapper {
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.message-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.image-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0);
+.photo-button {
   display: flex;
   align-items: center;
-  justify-content: center;
-  opacity: 0;
+  gap: 0.8rem;
+  padding: 0.9rem 1.2rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: #4a5568;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
   transition: all 0.3s ease;
 }
 
-.image-overlay i {
-  font-size: 2rem;
-  color: white;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.3s ease;
+.photo-button:hover {
+  background: #edf2f7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.message-image-wrapper:hover .message-image {
-  transform: scale(1.05);
-}
-
-.message-image-wrapper:hover .image-overlay {
-  background: rgba(0, 0, 0, 0.3);
-  opacity: 1;
-}
-
-.message-image-wrapper:hover .image-overlay i {
-  opacity: 1;
-  transform: scale(1);
+.photo-button i {
+  font-size: 1.3rem;
+  color: var(--primary-green);
 }
 
 .message-footer {
-  padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -493,36 +556,46 @@ const closeLightbox = () => {
 .like-button {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 1rem;
-  background: #f8f9fa;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 25px;
-  color: #6c757d;
-  font-size: 0.9rem;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 30px;
+  color: #4a5568;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .like-button:hover {
-  background: #f1f3f5;
-  transform: translateY(-2px);
+  background: #f8fafc;
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .like-button i {
-  font-size: 1rem;
-  color: #6c757d;
+  font-size: 1.1rem;
   transition: all 0.3s ease;
+  color: #cbd5e0;
 }
 
 .like-button.liked {
-  background: rgba(220, 53, 69, 0.1);
-  border-color: rgba(220, 53, 69, 0.2);
-  color: #dc3545;
+  background: #fdf2f2;
+  border-color: #fed7d7;
+  color: #e53e3e;
 }
 
 .like-button.liked i {
-  color: #dc3545;
+  color: #e53e3e;
+  animation: pulse 0.6s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
 }
 
 .lightbox {
@@ -608,16 +681,6 @@ const closeLightbox = () => {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-@media (min-width: 768px) {
-  .messages-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .date-full {
-    display: block;
-  }
 }
 
 @media (max-width: 767px) {

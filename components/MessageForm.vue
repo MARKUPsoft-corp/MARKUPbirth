@@ -175,15 +175,20 @@ const submitMessage = async () => {
       photoPath
     };
     
-    await api.post('/api/messages', messageData);
+    // Envoyer via le store qui utilise les websockets
+    const success = await messageStore.addMessage(messageData);
     
-    // Reset form
-    form.username = '';
-    form.message = '';
-    removePreview();
-    
-    // Show success message
-    alert('Message envoyé avec succès !');
+    if (success) {
+      // Reset form
+      form.username = '';
+      form.message = '';
+      removePreview();
+      
+      // Show success message
+      alert('Message envoyé avec succès !');
+    } else {
+      throw new Error('Échec de l\'envoi du message');
+    }
   } catch (err) {
     console.error('Error submitting message:', err);
     error.value = 'Une erreur est survenue lors de l\'envoi du message';
