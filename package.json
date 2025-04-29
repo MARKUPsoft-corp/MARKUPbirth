@@ -14,7 +14,7 @@
     "clean": "rm -rf .nuxt node_modules/.vite node_modules/.cache .output dist"
   },
   "dependencies": {
-    "@pinia/nuxt": "^2.0.0",
+    "@pinia/nuxt": "^0.4.11",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.11.3",
@@ -27,7 +27,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.7.4",
-    "pinia": "^2.1.7",
+    "pinia": "^2.0.36",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
     "vue": "^3.3.4",
