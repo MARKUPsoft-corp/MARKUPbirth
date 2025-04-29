@@ -15,10 +15,7 @@ services:
       - key: API_PORT
         value: 3001
       - key: FRONTEND_URL
-        fromService:
-          name: birth-app
-          type: web
-          property: url
+        value: "https://birth-app.onrender.com"
     
     # Configuration pour gérer les uploads de fichiers
     disk:
