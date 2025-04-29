@@ -203,57 +203,91 @@ onUnmounted(() => {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 1.5rem 2rem;
+  position: relative;
 }
 
 .game-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.2rem;
+  background: linear-gradient(to right, rgba(46, 204, 113, 0.1), rgba(243, 156, 18, 0.1));
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(46, 204, 113, 0.1);
+  position: relative;
+}
+
+.game-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary-green), var(--primary-orange));
+  border-radius: 12px 0 0 12px;
 }
 
 .game-stats {
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
-  color: #555;
+  gap: 0.7rem;
+  font-weight: 600;
+  color: #444;
+  font-size: 1.05rem;
 }
 
 .stat-item i {
   color: var(--primary-green);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  filter: drop-shadow(0 2px 3px rgba(46, 204, 113, 0.2));
 }
 
 .reset-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #f1f1f1;
-  border: none;
+  gap: 0.7rem;
+  padding: 0.7rem 1.4rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(46, 204, 113, 0.2);
   border-radius: 50px;
-  color: #555;
-  font-weight: 500;
+  color: #444;
+  font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 }
 
 .reset-button:hover {
-  background: #e4e4e4;
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.15);
+  color: var(--primary-green);
+}
+
+.reset-button i {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.reset-button:hover i {
+  transform: rotate(45deg);
 }
 
 .memory-board {
   display: grid;
   grid-gap: 1rem;
   perspective: 1000px;
+  margin-top: 1rem;
 }
 
 .memory-card {
@@ -278,12 +312,13 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
 }
 
 .memory-card:not(.matched):hover .card-inner {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
 }
 
 .card-front, .card-back {
@@ -301,11 +336,24 @@ onUnmounted(() => {
 .card-front {
   background: linear-gradient(135deg, var(--primary-green), var(--primary-orange));
   color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card-front i {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  font-size: 2.2rem;
 }
 
 .card-back {
   background: white;
   transform: rotateY(180deg);
+  box-shadow: inset 0 0 0 2px rgba(46, 204, 113, 0.1);
+}
+
+.card-back i {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
+  transform: scale(1.2);
 }
 
 .win-screen {
@@ -320,59 +368,108 @@ onUnmounted(() => {
   background: rgba(255, 255, 255, 0.9);
   z-index: 10;
   animation: fadeIn 0.5s ease;
+  backdrop-filter: blur(5px);
 }
 
 .win-content {
   text-align: center;
   background: white;
   border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
   max-width: 90%;
+  border: 1px solid rgba(46, 204, 113, 0.1);
+  position: relative;
+}
+
+.win-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-green), var(--primary-orange));
+  border-radius: 16px 16px 0 0;
 }
 
 .win-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 1.8rem;
   background: linear-gradient(135deg, var(--primary-green), var(--primary-orange));
   color: white;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2.5rem;
+  font-size: 2.8rem;
+  box-shadow: 0 10px 25px rgba(46, 204, 113, 0.2);
 }
 
 .win-content h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 2.2rem;
+  margin-bottom: 1.2rem;
   color: #333;
+  background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .win-content p {
-  color: #666;
-  margin-bottom: 1.5rem;
+  color: #555;
+  margin-bottom: 1.8rem;
+  font-size: 1.1rem;
 }
 
 .play-again-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.8rem 1.5rem;
+  gap: 0.7rem;
+  padding: 1rem 2rem;
   background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
   color: white;
   border: none;
   border-radius: 50px;
-  font-weight: 500;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.play-again-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.3) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+  transition: left 0.5s ease;
+}
+
+.play-again-button:hover::before {
+  left: 100%;
 }
 
 .play-again-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.2);
+  box-shadow: 0 8px 25px rgba(46, 204, 113, 0.3);
+}
+
+.play-again-button i {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.play-again-button:hover i {
+  transform: rotate(45deg);
 }
 
 @keyframes fadeIn {
@@ -382,11 +479,23 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .memory-board {
-    grid-gap: 0.5rem;
+    grid-gap: 0.8rem;
   }
   
   .card-front, .card-back {
     font-size: 1.5rem;
+  }
+  
+  .game-stats {
+    gap: 1.2rem;
+  }
+  
+  .stat-item {
+    font-size: 0.95rem;
+  }
+  
+  .stat-item i {
+    font-size: 1.2rem;
   }
 }
 
@@ -395,10 +504,31 @@ onUnmounted(() => {
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
+    padding: 1rem;
   }
   
   .card-front, .card-back {
     font-size: 1.2rem;
+  }
+  
+  .win-content {
+    padding: 1.8rem;
+  }
+  
+  .win-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .win-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  .play-again-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
   }
 }
 </style> 

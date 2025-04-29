@@ -230,7 +230,7 @@ onUnmounted(() => {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 1.5rem 2rem;
   position: relative;
 }
 
@@ -238,67 +238,130 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.2rem;
+  background: linear-gradient(to right, rgba(243, 156, 18, 0.1), rgba(46, 204, 113, 0.1));
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(243, 156, 18, 0.1);
+  position: relative;
+}
+
+.game-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary-orange), var(--primary-green));
+  border-radius: 12px 0 0 12px;
 }
 
 .game-stats {
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
-  color: #555;
+  gap: 0.7rem;
+  font-weight: 600;
+  color: #444;
+  font-size: 1.05rem;
 }
 
 .stat-item i {
   color: var(--primary-orange);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  filter: drop-shadow(0 2px 3px rgba(243, 156, 18, 0.2));
 }
 
 .start-button, .reset-button, .play-button, .play-again-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 0.7rem 1.4rem;
   border: none;
   border-radius: 50px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .start-button, .play-button, .play-again-button {
-  background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
+  background: linear-gradient(45deg, var(--primary-orange), var(--primary-green));
   color: white;
-  padding: 0.8rem 1.5rem;
+  padding: 0.9rem 1.8rem;
+  box-shadow: 0 5px 15px rgba(243, 156, 18, 0.15);
+  position: relative;
+  overflow: hidden;
+  font-size: 1.05rem;
+}
+
+.start-button::before, .play-button::before, .play-again-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.3) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+  transition: left 0.5s ease;
+}
+
+.start-button:hover::before, .play-button:hover::before, .play-again-button:hover::before {
+  left: 100%;
 }
 
 .reset-button {
-  background: #f1f1f1;
-  color: #555;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(243, 156, 18, 0.2);
+  color: #444;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 }
 
 .start-button:hover, .play-button:hover, .play-again-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.2);
+  box-shadow: 0 8px 25px rgba(243, 156, 18, 0.25);
 }
 
 .reset-button:hover {
-  background: #e4e4e4;
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(243, 156, 18, 0.15);
+  color: var(--primary-orange);
+}
+
+.start-button i, .play-button i, .play-again-button i, .reset-button i {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.start-button:hover i, .play-button:hover i, .play-again-button:hover i {
+  transform: scale(1.1);
+}
+
+.reset-button:hover i {
+  transform: rotate(45deg);
 }
 
 .game-board {
   height: 400px;
-  background: #f8f9fa;
+  background: linear-gradient(to bottom, 
+    rgba(255, 255, 255, 1), 
+    rgba(249, 249, 249, 0.7));
   border-radius: 16px;
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .target {
@@ -314,8 +377,13 @@ onUnmounted(() => {
   cursor: pointer;
   transform-origin: center;
   transition: transform 0.2s;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   animation: popIn 0.3s ease-out;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.target i {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .target:hover {
@@ -332,13 +400,16 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 8px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border-radius: 0 0 16px 16px;
 }
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(to right, var(--primary-green), var(--primary-orange));
+  background: linear-gradient(to right, var(--primary-orange), var(--primary-green));
   transition: width 1s linear;
+  box-shadow: 0 0 10px rgba(243, 156, 18, 0.3);
 }
 
 .start-screen, .game-over-screen {
@@ -349,39 +420,62 @@ onUnmounted(() => {
   height: 400px;
   background: white;
   border-radius: 16px;
-  padding: 2rem;
+  padding: 2.5rem;
   text-align: center;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.start-screen::before, .game-over-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-orange), var(--primary-green));
+  border-radius: 16px 16px 0 0;
 }
 
 .start-icon, .result-icon {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--primary-green), var(--primary-orange));
+  width: 90px;
+  height: 90px;
+  margin-bottom: 1.8rem;
+  background: linear-gradient(135deg, var(--primary-orange), var(--primary-green));
   color: white;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2.5rem;
+  font-size: 2.8rem;
+  box-shadow: 0 10px 25px rgba(243, 156, 18, 0.2);
 }
 
 .start-screen h2, .game-over-screen h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 2.2rem;
+  margin-bottom: 1.2rem;
   color: #333;
+  background: linear-gradient(45deg, var(--primary-orange), var(--primary-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .start-screen p, .game-over-screen p {
-  color: #666;
-  margin-bottom: 1.5rem;
+  color: #555;
+  margin-bottom: 1.8rem;
   max-width: 450px;
+  font-size: 1.1rem;
 }
 
 .score-message {
-  font-weight: 500;
-  color: var(--primary-green) !important;
+  font-weight: 600;
+  color: var(--primary-orange) !important;
+  -webkit-text-fill-color: var(--primary-orange);
+  padding: 0.8rem 1.5rem;
+  background: rgba(243, 156, 18, 0.1);
+  border-radius: 8px;
+  margin-top: -0.5rem;
 }
 
 @keyframes popIn {
@@ -408,6 +502,33 @@ onUnmounted(() => {
     height: 50px;
     font-size: 1.5rem;
   }
+  
+  .game-stats {
+    gap: 1.2rem;
+  }
+  
+  .stat-item {
+    font-size: 0.95rem;
+  }
+  
+  .stat-item i {
+    font-size: 1.2rem;
+  }
+  
+  .start-screen, .game-over-screen {
+    padding: 2rem;
+  }
+  
+  .start-icon, .result-icon {
+    width: 75px;
+    height: 75px;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .start-screen h2, .game-over-screen h2 {
+    font-size: 1.8rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -415,6 +536,7 @@ onUnmounted(() => {
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
+    padding: 1rem;
   }
   
   .game-board, .start-screen, .game-over-screen {
@@ -425,6 +547,32 @@ onUnmounted(() => {
     width: 45px;
     height: 45px;
     font-size: 1.2rem;
+  }
+  
+  .start-screen, .game-over-screen {
+    padding: 1.5rem;
+  }
+  
+  .start-icon, .result-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 2rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .start-screen h2, .game-over-screen h2 {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .start-screen p, .game-over-screen p {
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .start-button, .play-button, .play-again-button {
+    padding: 0.7rem 1.4rem;
+    font-size: 0.9rem;
   }
 }
 </style> 
