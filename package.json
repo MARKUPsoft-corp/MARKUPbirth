@@ -14,7 +14,7 @@
     "clean": "rm -rf .nuxt node_modules/.vite node_modules/.cache .output dist"
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.11.0",
+    "@pinia/nuxt": "^2.0.0",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.11.3",
