@@ -40,11 +40,7 @@ const navItems = [
   { name: 'Accueil', path: '/' },
   { name: 'Messages', path: '/mur-messages' },
   { name: 'Quiz', path: '/quiz' },
-  { name: 'Mini-jeux', path: '/jeux' },
-  { name: 'Défis', path: '/defis' },
-  { name: 'Sondages', path: '/sondages' },
-  { name: 'Playlist', path: '/playlist' },
-  { name: 'Galerie', path: '/galerie' }
+  { name: 'Mini-jeux', path: '/jeux' }
 ]
 
 const handleScroll = () => {

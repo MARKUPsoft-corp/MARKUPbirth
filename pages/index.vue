@@ -161,65 +161,7 @@
           </div>
         </div>
 
-        <!-- Carte Défis -->
-        <div class="feature-card challenges-card" v-scroll-reveal="{ delay: 500, distance: '50px', origin: 'bottom' }">
-          <div class="card-content">
-            <div class="card-icon">
-              <i class="bi bi-trophy"></i>
-            </div>
-            <h3>Défis</h3>
-            <p>Relevez des défis personnalisés</p>
-            <NuxtLink to="/defis" class="card-button">
-              Voir les défis
-              <i class="bi bi-arrow-right"></i>
-            </NuxtLink>
-          </div>
-        </div>
-
-        <!-- Carte Sondages -->
-        <div class="feature-card polls-card" v-scroll-reveal="{ delay: 600, distance: '50px', origin: 'bottom' }">
-          <div class="card-content">
-            <div class="card-icon">
-              <i class="bi bi-bar-chart"></i>
-            </div>
-            <h3>Sondages</h3>
-            <p>Participez aux sondages et découvrez les résultats</p>
-            <NuxtLink to="/sondages" class="card-button">
-              Voter
-              <i class="bi bi-arrow-right"></i>
-            </NuxtLink>
-          </div>
-        </div>
-        
-        <!-- Carte Playlist -->
-        <div class="feature-card playlist-card" v-scroll-reveal="{ delay: 700, distance: '50px', origin: 'bottom' }">
-          <div class="card-content">
-            <div class="card-icon">
-              <i class="bi bi-music-note-beamed"></i>
-            </div>
-            <h3>Playlist</h3>
-            <p>Écoutez et partagez de la musique</p>
-            <NuxtLink to="/playlist" class="card-button">
-              Écouter
-              <i class="bi bi-arrow-right"></i>
-            </NuxtLink>
-          </div>
-        </div>
-        
-        <!-- Carte Galerie -->
-        <div class="feature-card gallery-card" v-scroll-reveal="{ delay: 800, distance: '50px', origin: 'bottom' }">
-          <div class="card-content">
-            <div class="card-icon">
-              <i class="bi bi-images"></i>
-            </div>
-            <h3>Galerie</h3>
-            <p>Partagez vos photos souvenirs</p>
-            <NuxtLink to="/galerie" class="card-button">
-              Voir la galerie
-              <i class="bi bi-arrow-right"></i>
-            </NuxtLink>
-          </div>
-        </div>
+        <!-- Les cartes pour les pages non implémentées ont été supprimées -->
       </div>
     </div>
   </div>
@@ -647,6 +589,9 @@ onUnmounted(() => {
   height: calc(100vh - 80px); /* Hauteur exacte pour s'adapter à l'écran */
   padding: 0 2rem;
   box-sizing: border-box;
+  /* Réduire le padding sur mobile */
+  padding-top: clamp(1rem, 3vh, 2.5rem);
+  padding-bottom: clamp(1rem, 3vh, 2.5rem);
 }
 
 .hero-text {
@@ -700,6 +645,7 @@ onUnmounted(() => {
   margin-bottom: clamp(0.3rem, 1vh, 0.8rem);
   background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   position: relative;
@@ -736,6 +682,7 @@ onUnmounted(() => {
 .highlight-name {
   background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 600;
 }
@@ -821,18 +768,18 @@ onUnmounted(() => {
 }
 
 .number-content {
-  font-size: clamp(1.3rem, 4vw, 2.8rem);
+  font-size: clamp(2rem, 6vw, 3.2rem);
   font-weight: 700;
-  color: white;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .countdown-label {
-  font-size: clamp(0.6rem, 0.8vw, 0.8rem);
-  color: rgba(255, 255, 255, 0.7);
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-weight: 500;
 }
 
 /* Call to action */
@@ -1242,283 +1189,136 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-  .cards-section {
-    padding: 4rem 1.5rem 5rem; /* Plus de marge sur les côtés */
-  }
-  
   .cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    max-width: 95%;
-    margin: 0 auto;
-    padding: 0 0.5rem;
+    grid-template-columns: 1fr;
+    padding: 1rem;
   }
   
   .feature-card {
     max-width: 100%;
-    transform-origin: center;
   }
   
-  .card-content {
-    padding: 2rem 1.5rem;
+  .section-title h2 {
+    font-size: 2rem;
+  }
+  
+  /* Augmenter la taille du compteur et des textes sur mobile */
+  .hero-content {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    height: calc(100vh - 60px); /* Réduire la hauteur pour éviter les marges */
+  }
+  
+  .main-title {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    margin-bottom: 1rem;
+  }
+  
+  .countdown-container {
+    gap: 0.8rem;
+    max-width: 100%;
+    padding: 0 0.3rem;
+  }
+  
+  .countdown-item {
+    width: clamp(70px, 23%, 120px);
+    padding: 0.7rem 0.4rem;
+    margin: 0.2rem;
+  }
+  
+  .countdown-number-3d {
+    height: clamp(40px, 8vw, 50px);
+    margin-bottom: 0.4rem;
+  }
+  
+  .number-content {
+    font-size: clamp(2.2rem, 8vw, 3rem);
+    font-weight: 700;
+  }
+  
+  .countdown-label {
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
+    letter-spacing: 1px;
+  }
+  
+  .scroll-button {
+    bottom: 0.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .cards-section {
-    padding: 3.5rem 1rem 4.5rem; /* Plus de marge sur les côtés */
+  .hero-content {
+    padding-top: 0.3rem; /* Réduire encore plus sur les petits écrans */
+    padding-bottom: 0.3rem;
   }
   
-  .cards-grid {
-    grid-template-columns: 1fr;
-    max-width: 90%;
-    padding: 0 1rem;
+  .main-title {
+    font-size: clamp(2rem, 6vw, 3rem);
+    margin-bottom: 0.2rem;
   }
   
-  .card-content {
-    padding: 1.8rem 1.2rem;
+  .subtitle {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    margin-bottom: 0.3rem;
   }
   
-  .feature-card {
-    border-radius: 12px;
+  .countdown-container {
+    gap: 0.3rem;
   }
   
-  .card-icon {
-    width: 75px;
-    height: 75px;
+  .countdown-item {
+    width: clamp(65px, 22%, 110px);
+    padding: 0.4rem 0.3rem;
+  }
+  
+  .countdown-number-3d {
+    height: 35px;
+  }
+  
+  .number-content {
     font-size: 2rem;
-    margin-bottom: 1rem;
   }
   
-  .feature-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.7rem;
-  }
-  
-  .feature-card p {
-    font-size: 0.95rem;
-    margin-bottom: 1.4rem;
-  }
-  
-  .card-button {
-    padding: 0.7rem 1.2rem;
-    font-size: 0.9rem;
+  .countdown-label {
+    font-size: 0.8rem;
   }
 }
 
+/* Pour les très petits écrans mobiles */
 @media (max-width: 360px) {
-  .cards-section {
-    padding: 3rem 0.5rem 4rem;
-  }
-  
-  .cards-grid {
-    max-width: 95%;
-    padding: 0 0.5rem;
-  }
-  
-  .card-content {
-    padding: 1.5rem 1rem;
-  }
-  
-  .card-icon {
-    width: 65px;
-    height: 65px;
-    font-size: 1.7rem;
-  }
-  
-  .feature-card h3 {
-    font-size: 1.3rem;
-  }
-  
-  .feature-card p {
-    font-size: 0.9rem;
-    line-height: 1.4;
-  }
-  
-  .feature-card {
-    border-radius: 10px;
-  }
-}
-
-/* Animations */
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-@keyframes bubbleRise {
-  0% {
-    transform: translateY(0) translateX(0) scale(1);
-    opacity: 0;
-  }
-  5% {
-    opacity: 0.8;
-  }
-  25% {
-    transform: translateY(-25vh) translateX(calc(var(--pos-x) * 0.1px)) scale(1.2);
-  }
-  50% {
-    transform: translateY(-50vh) translateX(calc(var(--pos-x) * -0.1px)) scale(1.4);
-  }
-  75% {
-    transform: translateY(-75vh) translateX(calc(var(--pos-x) * 0.1px)) scale(1.6);
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateY(-100vh) translateX(0) scale(1.8);
-    opacity: 0;
-  }
-}
-
-@keyframes confettiFall {
-  0% {
-    transform: translateY(0) rotate(var(--rotation));
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 0.3;
-  }
-  100% {
-    transform: translateY(100vh) rotate(calc(var(--rotation) + 180deg));
-    opacity: 0;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Media queries améliorées */
-@media (max-width: 992px) and (min-height: 700px) {
-  .hero-section {
-    padding-top: 60px;
-  }
-  
   .hero-content {
-    min-height: calc(100vh - 60px);
+    padding: 0.2rem 0.8rem;
   }
   
   .hero-text {
-    padding: 2rem 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-section {
-    height: auto;
-    min-height: 100vh;
-    padding-top: 60px;
-  }
-  
-  .hero-content {
-    height: auto;
-    min-height: calc(100vh - 60px);
-    padding: 2rem 1rem;
-    padding-bottom: 1rem; /* Réduire l'espace en bas */
-  }
-  
-  .hero-text {
-    padding: 1.5rem 1rem 1rem; /* Réduire le padding en bas */
+    padding: 1rem 0.6rem;
   }
   
   .countdown-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, auto);
-    gap: 1rem;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+    max-width: 100%;
+    gap: 0.4rem;
   }
   
   .countdown-item {
     width: 100%;
-    margin: 0;
-    padding: 0.8rem 0.5rem;
+    padding: 0.6rem 0.3rem;
+    margin: 0.1rem;
   }
   
   .number-content {
-    font-size: clamp(1.5rem, 5vw, 2.5rem);
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-content {
-    padding: 1.5rem 1rem 0.5rem; /* Réduire encore plus l'espace en bas */
-  }
-  
-  .hero-text {
-    padding: 1.2rem 0.8rem 0.8rem; /* Réduire davantage le padding */
-  }
-  
-  .cta-container {
-    margin-top: 0.8rem;
-    margin-bottom: 0.5rem; /* Ajouter une marge en bas minimale */
-  }
-}
-
-/* Pour les téléphones avec petits écrans */
-@media (max-width: 360px) {
-  .hero-content {
-    padding: 1rem 0.8rem 0.3rem; /* Espace minimal en bas */
-  }
-  
-  .hero-text {
-    padding: 1rem 0.6rem 0.6rem;
-  }
-  
-  .cta-container {
-    margin-top: 0.6rem;
-    margin-bottom: 0.3rem;
-  }
-}
-
-@media (max-height: 600px) {
-  .hero-section {
-    height: auto;
-    min-height: calc(100vh - 60px);
-  }
-  
-  .hero-content {
-    height: auto;
-    min-height: auto;
-    padding: 1rem;
-  }
-  
-  .hero-text {
-    padding: 1rem;
-  }
-  
-  .main-title {
-    font-size: clamp(2rem, 3vw, 2.5rem);
-    margin-bottom: 0.5rem;
-  }
-  
-  .subtitle {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .countdown-3d {
-    margin-bottom: 0.5rem;
+    font-size: clamp(1.8rem, 7vw, 2.2rem);
   }
   
   .countdown-number-3d {
-    height: 40px;
+    height: 35px;
+    margin-bottom: 0.2rem;
   }
 }
 
