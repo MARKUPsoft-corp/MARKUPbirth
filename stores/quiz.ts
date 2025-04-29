@@ -83,6 +83,7 @@ export const useQuizStore = defineStore('quiz', () => {
   // Submit an answer to the current question
   const submitAnswer = async (answerIndex: number) => {
     try {
+      // Ajouter la réponse à la liste
       userAnswers.value.push(answerIndex);
       
       // Check if answer is correct via API
@@ -90,8 +91,11 @@ export const useQuizStore = defineStore('quiz', () => {
         answerIndex
       });
       
-      // Toujours incrémenter l'index, même pour la dernière question
-      currentQuestionIndex.value++;
+      // Augmenter l'index pour passer à la question suivante
+      // Même pour la dernière question (l'interface s'occupera de la transition)
+      if (currentQuestionIndex.value < questions.value.length) {
+        currentQuestionIndex.value++;
+      }
       
       return response.isCorrect;
     } catch (err: any) {

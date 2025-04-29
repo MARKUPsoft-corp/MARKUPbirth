@@ -684,6 +684,10 @@ const completeQuiz = async () => {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   margin-bottom: 2rem;
   transition: all 0.4s ease;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .quiz-card:hover {
@@ -1221,6 +1225,7 @@ const completeQuiz = async () => {
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .rank-badge {
@@ -1259,6 +1264,7 @@ const completeQuiz = async () => {
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .score-badge {
@@ -1295,7 +1301,7 @@ const completeQuiz = async () => {
   }
   
   .container {
-    padding: 0 1rem;
+    padding: 0 0.7rem;
   }
   
   .card-content {
@@ -1304,6 +1310,12 @@ const completeQuiz = async () => {
   
   .button-group {
     flex-direction: column;
+  }
+  
+  .quiz-card, .top-results-card {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .score-display {
@@ -1323,6 +1335,56 @@ const completeQuiz = async () => {
   
   .result-score {
     margin-left: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quiz-content {
+    padding: 0;
+  }
+  
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .quiz-card, .top-results-card {
+    width: 98%;
+    border-radius: 12px;
+  }
+  
+  .card-content {
+    padding: 1.2rem;
+  }
+  
+  .card-header {
+    padding: 1rem 1.2rem;
+  }
+  
+  .card-header-title {
+    font-size: 1.2rem;
+  }
+  
+  .quiz-badge {
+    font-size: 1.1rem;
+    padding: 0.6rem 1.2rem;
+  }
+  
+  .result-progress {
+    max-width: 260px;
+  }
+  
+  .score-badge, .badge-name {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .result-item {
+    padding: 0.8rem 1rem;
+  }
+  
+  .user-tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
   }
 }
 </style> 

@@ -47,7 +47,7 @@
           <p v-if="answerResult">Bonne réponse !</p>
           <p v-else>
             Mauvaise réponse ! 
-            <span class="correct-answer">La bonne réponse était : {{ question.options[question.answer] }}</span>
+            <span class="correct-answer">La bonne réponse était : {{ correctAnswerText }}</span>
           </p>
         </div>
       </div>
@@ -78,6 +78,7 @@ const imageError = ref(false);
 const answered = ref(false);
 const userAnswer = ref(null);
 const answerResult = ref(false);
+const correctAnswerText = ref('');
 
 // Handle broken images
 const handleImageError = () => {
@@ -92,23 +93,27 @@ const selectAnswer = async (index) => {
   // Vérifier si la réponse est correcte
   answerResult.value = index === props.question.answer;
   
-  // Emit the answer to parent
-  emit('answer-selected', index);
+  // Stocker la bonne réponse avant qu'elle ne change
+  correctAnswerText.value = props.question.options[props.question.answer];
   
-  // Si c'est la dernière question, passer aux résultats après un délai court
-  const delay = props.isLastQuestion ? 500 : 2000;
-  
+  // Emit the answer to parent (mais ne le faire qu'une fois)
+  // Cette émission déclenche l'incrémentation dans le store
+  // Donc si on veut voir le feedback pendant 2 secondes, on doit retarder cet événement
   setTimeout(() => {
-    // Si dernière question, émettre quiz-completed
+    // Après avoir montré la réponse pendant 2 secondes, 
+    // envoyer la réponse au parent ce qui va incrémenter l'index
+    emit('answer-selected', index);
+    
+    // Si c'est la dernière question, émettre quiz-completed après le délai
     if (props.isLastQuestion) {
-      emit('quiz-completed');
+      setTimeout(() => emit('quiz-completed'), 500);
     }
     
-    // Réinitialiser l'état
+    // Réinitialiser l'état pour la prochaine question
     answered.value = false;
     userAnswer.value = null;
     answerResult.value = false;
-  }, delay);
+  }, 2000);
 };
 </script>
 
@@ -266,6 +271,8 @@ const selectAnswer = async (index) => {
   align-items: center;
   gap: 1rem;
   animation: fadeIn 0.5s ease;
+  position: relative;
+  z-index: 10;
 }
 
 .feedback-success {
@@ -276,6 +283,7 @@ const selectAnswer = async (index) => {
 .feedback-error {
   background: rgba(231, 76, 60, 0.15);
   border: 1px solid rgba(231, 76, 60, 0.3);
+  animation: pulseError 1s ease-in-out infinite;
 }
 
 .feedback-icon {
@@ -311,13 +319,19 @@ const selectAnswer = async (index) => {
   display: block;
   margin-top: 0.5rem;
   font-size: 0.95rem;
-  font-weight: normal;
-  opacity: 0.9;
+  font-weight: 500;
+  opacity: 1;
+  color: #e74c3c;
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseError {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 }
 
 @media (max-width: 768px) {
