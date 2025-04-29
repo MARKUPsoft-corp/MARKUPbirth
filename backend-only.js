@@ -12,19 +12,69 @@ console.log('Mode API-only activé');
 // Créer l'application principale qui sera exposée sur Render
 const app = express();
 
-// Configurer CORS pour autoriser les requêtes depuis n'importe où (temporairement)
+// Configurer CORS pour autoriser explicitement le domaine Netlify
 app.use(cors({
-  origin: '*',
+  origin: ['https://markupbirth.netlify.app', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
+
+// Ajouter des en-têtes CORS manuellement pour s'assurer qu'ils sont bien configurés
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://markupbirth.netlify.app');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Répondre immédiatement aux requêtes OPTIONS (préflight)
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
+  next();
+});
+
+// Ajouter la prise en charge de JSON pour les requêtes POST
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Importer et utiliser les routes API
+const apiRoutes = require('./api-routes');
+app.use('/api', apiRoutes);
 
 // Route de base pour confirmer que le serveur est en ligne
 app.get('/', (req, res) => {
   res.json({
     status: 'online',
     message: 'API server for Birth application is running',
-    time: new Date().toISOString()
+    time: new Date().toISOString(),
+    endpoints: [
+      '/api/messages',
+      '/api/quiz',
+      '/api/quiz/results/top',
+      '/api/status'
+    ]
+  });
+});
+
+// Middleware pour journaliser toutes les requêtes (débogage)
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
+  next();
+});
+
+// Gestion des erreurs 404
+app.use((req, res, next) => {
+  res.status(404).json({
+    error: 'Not Found',
+    message: `La route ${req.originalUrl} n'existe pas`,
+    availableEndpoints: [
+      '/api/messages',
+      '/api/quiz',
+      '/api/quiz/results/top',
+      '/api/status'
+    ]
   });
 });
 
