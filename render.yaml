@@ -5,7 +5,7 @@ services:
     name: birth-app
     env: node
     plan: free # Plan gratuit de Render
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npm run generate
     startCommand: NODE_ENV=production node server.js
     envVars:
       - key: NODE_ENV

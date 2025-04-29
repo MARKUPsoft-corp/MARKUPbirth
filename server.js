@@ -64,12 +64,63 @@ setTimeout(() => {
       pathRewrite: {'^/api': ''}
     }));
     
-    // Servir les fichiers statiques générés par Nuxt
-    app.use(express.static(path.join(__dirname, '.output/public')));
+    // Chemins possibles pour les fichiers statiques de Nuxt
+    const possiblePaths = [
+      path.join(__dirname, '.output/public'),
+      path.join(__dirname, 'dist'),      
+      path.join(__dirname, '.nuxt/dist/client')
+    ];
     
-    // Pour toutes les autres routes, renvoyer l'index.html de Nuxt
+    // Vérifier quel chemin existe
+    let staticPath = null;
+    let indexPath = null;
+    
+    for (const p of possiblePaths) {
+      try {
+        if (require('fs').existsSync(p)) {
+          staticPath = p;
+          console.log(`Chemin statique trouvé: ${p}`);
+          
+          // Vérifier si index.html existe
+          const indexFile = path.join(p, 'index.html');
+          if (require('fs').existsSync(indexFile)) {
+            indexPath = indexFile;
+            console.log(`index.html trouvé à: ${indexFile}`);
+            break;
+          }
+        }
+      } catch (err) {
+        console.error(`Erreur en vérifiant le chemin ${p}:`, err);
+      }
+    }
+    
+    // Servir les fichiers statiques générés par Nuxt
+    if (staticPath) {
+      app.use(express.static(staticPath));
+      console.log(`Servir les fichiers statiques depuis: ${staticPath}`);
+    } else {
+      console.warn('Aucun répertoire statique trouvé!');
+    }
+    
+    // Pour toutes les autres routes
     app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '.output/public/index.html'));
+      if (indexPath) {
+        res.sendFile(indexPath);
+      } else {
+        // Essayer de servir la page de fallback
+        const fallbackPath = path.join(__dirname, 'fallback.html');
+        try {
+          if (require('fs').existsSync(fallbackPath)) {
+            console.log('Utilisation de la page fallback.html');
+            res.sendFile(fallbackPath);
+          } else {
+            res.status(404).send('Application non disponible. Build incomplet.');
+          }
+        } catch (err) {
+          console.error('Erreur en servant la page fallback:', err);
+          res.status(404).send('Application non disponible. Build incomplet.');
+        }
+      }
     });
     
     // Démarrer le serveur principal
