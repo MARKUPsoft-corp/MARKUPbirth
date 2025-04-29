@@ -47,7 +47,7 @@
           <p v-if="answerResult">Bonne réponse !</p>
           <p v-else>
             Mauvaise réponse ! 
-            <span class="correct-answer">La bonne réponse était : {{ question.options[question.correctAnswer] }}</span>
+            <span class="correct-answer">La bonne réponse était : {{ question.options[question.answer] }}</span>
           </p>
         </div>
       </div>
@@ -85,9 +85,11 @@ const selectAnswer = async (index) => {
   userAnswer.value = index;
   answered.value = true;
   
+  // Vérifier si la réponse est correcte
+  answerResult.value = index === props.question.answer;
+  
   // Emit the answer to parent
-  const result = await emit('answer-selected', index);
-  answerResult.value = result;
+  emit('answer-selected', index);
   
   // After a delay, move to next question
   setTimeout(() => {

@@ -48,12 +48,12 @@ Un site web festif pour célébrer l'anniversaire d'Emmanuel, créé avec Nuxt 3
    ```
 
 2. Installez les dépendances :
-   ```bash
-   npm install
+```bash
+npm install
    ```
 
 3. Démarrez le serveur de développement :
-   ```bash
+```bash
    npm run start
    ```
 
@@ -66,12 +66,12 @@ Un site web festif pour célébrer l'anniversaire d'Emmanuel, créé avec Nuxt 3
 Pour déployer en production :
 
 1. Compilez le frontend :
-   ```bash
-   npm run build
-   ```
+```bash
+npm run build
+```
 
 2. Pour démarrer en production :
-   ```bash
+```bash
    NODE_ENV=production npm run start
    ```
 

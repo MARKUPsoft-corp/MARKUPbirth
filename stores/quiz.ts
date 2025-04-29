@@ -66,7 +66,8 @@ export const useQuizStore = defineStore('quiz', () => {
     error.value = null;
     
     try {
-      const data = await api.get('/api/quiz', { hideAnswers: 'true' });
+      // Charger les questions avec les réponses
+      const data = await api.get('/api/quiz');
       questions.value = data;
       // Reset quiz state
       currentQuestionIndex.value = 0;

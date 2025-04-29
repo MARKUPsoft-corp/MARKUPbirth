@@ -278,7 +278,10 @@ const startQuiz = () => {
 
 // Submit an answer
 const submitAnswer = async (answerIndex) => {
-  return await quizStore.submitAnswer(answerIndex);
+  // Appeler le store et récupérer le résultat du serveur
+  const result = await quizStore.submitAnswer(answerIndex);
+  // Renvoyer le résultat au QuizCard
+  return result;
 };
 
 // Share quiz results
