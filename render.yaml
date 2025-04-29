@@ -6,7 +6,7 @@ services:
     env: node
     plan: free # Plan gratuit de Render
     buildCommand: bash ./render-build.sh
-    startCommand: NODE_ENV=production node direct-deploy.js
+    startCommand: NODE_ENV=production node force-deploy.js
     envVars:
       - key: NODE_ENV
         value: production

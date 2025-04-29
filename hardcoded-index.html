@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anniversaire d'Emmanuel YAKAM TCHAMEGNI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --primary-color: #FF8B00;
+      --secondary-color: #FFD700;
+      --dark-color: #222;
+      --light-color: #f8f9fa;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--dark-color);
+      background-color: var(--light-color);
+      overflow-x: hidden;
+    }
+    
+    .hero-section {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1533294455009-a77b7557d2d1?q=80&w=1000');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 120px 0;
+      text-align: center;
+    }
+    
+    .title-highlight {
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+    
+    .hero-buttons .btn {
+      margin: 10px;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover {
+      background-color: #e67e00;
+      border-color: #e67e00;
+    }
+    
+    .btn-outline-light:hover {
+      background-color: var(--secondary-color);
+      color: var(--dark-color);
+      border-color: var(--secondary-color);
+    }
+    
+    .feature-section {
+      padding: 80px 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .feature-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 30px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--dark-color);
+    }
+    
+    .feature-card p {
+      color: #6c757d;
+      margin-bottom: 20px;
+    }
+    
+    .card-button {
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      margin-top: auto;
+    }
+    
+    .card-button i {
+      margin-left: 5px;
+      transition: transform 0.3s ease;
+    }
+    
+    .card-button:hover i {
+      transform: translateX(5px);
+    }
+    
+    .footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 50px 0 20px;
+    }
+    
+    .footer-links a {
+      color: #ddd;
+      transition: color 0.3s ease;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    .social-links {
+      font-size: 1.5rem;
+    }
+    
+    .social-links a {
+      color: white;
+      margin-right: 15px;
+      transition: color 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    .copyright {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Section Héro -->
+  <section class="hero-section">
+    <div class="container">
+      <h1>Anniversaire d'<span class="title-highlight">Emmanuel YAKAM TCHAMEGNI</span></h1>
+      <p class="lead">Célébrons ensemble ce moment spécial!</p>
+      <div class="hero-buttons">
+        <a href="/galerie" class="btn btn-primary">Voir les photos</a>
+        <a href="/jeux" class="btn btn-outline-light">Jouer aux jeux</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Caractéristiques -->
+  <section class="feature-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Explorez les <span class="title-highlight">activités</span></h2>
+        <p>Découvrez toutes les expériences disponibles pour célébrer cet événement spécial</p>
+      </div>
+
+      <div class="row">
+        <!-- Carte Jeux -->
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="card-icon">
+              <i class="bi bi-controller"></i>
+            </div>
+            <h3>Jeux</h3>
+            <p>Amusez-vous avec des jeux interactifs</p>
+            <a href="/jeux" class="card-button">
+              Jouer
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Carte Quiz -->
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="card-icon">
+              <i class="bi bi-puzzle"></i>
+            </div>
+            <h3>Quiz</h3>
+            <p>Testez vos connaissances sur Emmanuel</p>
+            <a href="/quiz" class="card-button">
+              Commencer
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Carte Playlist -->
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="card-icon">
+              <i class="bi bi-music-note-beamed"></i>
+            </div>
+            <h3>Playlist</h3>
+            <p>Écoutez et partagez de la musique</p>
+            <a href="/playlist" class="card-button">
+              Écouter
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Carte Galerie -->
+        <div class="col-md-4 mt-4">
+          <div class="feature-card">
+            <div class="card-icon">
+              <i class="bi bi-images"></i>
+            </div>
+            <h3>Galerie</h3>
+            <p>Parcourez les photos souvenirs</p>
+            <a href="/galerie" class="card-button">
+              Explorer
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Carte Messages -->
+        <div class="col-md-4 mt-4">
+          <div class="feature-card">
+            <div class="card-icon">
+              <i class="bi bi-chat-heart"></i>
+            </div>
+            <h3>Messages</h3>
+            <p>Laissez vos vœux et messages</p>
+            <a href="/messages" class="card-button">
+              Écrire
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Carte Programme -->
+        <div class="col-md-4 mt-4">
+          <div class="feature-card">
+            <div class="card-icon">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+            <h3>Programme</h3>
+            <p>Consultez le planning de la journée</p>
+            <a href="/programme" class="card-button">
+              Voir
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <h3>À propos</h3>
+          <p>Ce site a été créé pour célébrer l'anniversaire d'Emmanuel YAKAM TCHAMEGNI et partager des moments spéciaux avec ses amis et sa famille.</p>
+        </div>
+        <div class="col-lg-4">
+          <h3>Liens rapides</h3>
+          <div class="footer-links">
+            <a href="/galerie">Galerie</a>
+            <a href="/jeux">Jeux</a>
+            <a href="/messages">Messages</a>
+            <a href="/programme">Programme</a>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <h3>Suivez-nous</h3>
+          <div class="social-links">
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright text-center">
+        <p>&copy; 2025 Anniversaire d'Emmanuel YAKAM TCHAMEGNI. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
