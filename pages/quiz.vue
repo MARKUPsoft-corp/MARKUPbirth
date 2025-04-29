@@ -44,7 +44,7 @@
           <div v-else-if="error" class="state-container error-state">
             <i class="bi bi-exclamation-circle"></i>
             <p>{{ error }}</p>
-            <button @click="fetchQuestions" class="retry-btn">
+            <button @click="quizStore.initializeQuiz()" class="retry-btn">
               <i class="bi bi-arrow-repeat"></i> Réessayer
             </button>
           </div>
@@ -222,10 +222,8 @@ onMounted(() => {
   // fetchTopResults supprimé car plus de backend
 });
 
-// Get questions
-const fetchQuestions = async () => {
-  await quizStore.fetchQuestions();
-};
+// Cette fonction a été supprimée car les questions sont déjà dans le store
+// plus besoin de fetchQuestions car c'est 100% frontend
 
 // Start the quiz
 const startQuiz = () => {

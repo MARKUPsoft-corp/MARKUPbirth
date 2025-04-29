@@ -20,6 +20,9 @@
             <span class="stat-value">{{ formatTime(elapsedTime) }}</span>
           </div>
         </div>
+        <div class="sound-toggle" @click="soundEnabled = !soundEnabled">
+          <i :class="`bi ${soundEnabled ? 'bi-volume-up' : 'bi-volume-mute'}`"></i>
+        </div>
       </div>
       <button v-if="!gameStarted && !gameWon" class="start-button" @click="startGame">
         <i class="bi bi-play-fill"></i>
@@ -65,7 +68,7 @@
     </div>
 
     <div v-else-if="isImageSelection" class="theme-selection">
-      <h2>Choisissez un thème</h2>
+      <h2>Choisissez un thème et une difficulté</h2>
       <div class="theme-grid">
         <div 
           v-for="(theme, index) in availableThemes" 
@@ -96,6 +99,30 @@
           </div>
         </div>
       </div>
+      <div class="difficulty-selection">
+        <h3>Choisissez la taille de la grille</h3>
+        <div class="grid-size-options">
+          <button 
+            v-for="size in [3, 4, 5]" 
+            :key="size"
+            class="grid-size-button" 
+            :class="{ 'selected': gridSize === size }"
+            @click="changeLevel(size)"
+            :style="{
+              'background-color': selectedImageIndex !== null && gridSize === size ? 
+                `${availableThemes[selectedImageIndex].color}22` : 'transparent',
+              'border-color': selectedImageIndex !== null && gridSize === size ? 
+                availableThemes[selectedImageIndex].color : 'var(--border-color)'
+            }"
+          >
+            <span class="grid-size-value">{{ size }}×{{ size }}</span>
+            <span class="difficulty-label">
+              {{ size === 3 ? 'Facile' : size === 4 ? 'Moyen' : 'Difficile' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
       <div class="selection-controls">
         <button class="back-button" @click="isImageSelection = false">
           <i class="bi bi-arrow-left"></i>
@@ -198,7 +225,8 @@
           :class="{ 
             'empty-tile': tile === 0, 
             'animate-move': lastMovedTile === index,
-            'shimmer': gameStarted && !gameWon && tile !== 0
+            'shimmer': gameStarted && !gameWon && tile !== 0,
+            'mobile-friendly': true
           }"
           @click="tile === 0 ? null : moveTile(index)"
         >
@@ -260,6 +288,31 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+
+// Gestionnaire des effets sonores
+const soundEnabled = ref(true); // État pour activer/désactiver les sons
+
+// Dictionnaire des effets sonores
+const sounds = {
+  move: '/sounds/move.mp3',
+  select: '/sounds/select.mp3',
+  win: '/sounds/win.mp3',
+  start: '/sounds/start.mp3',
+  error: '/sounds/error.mp3'
+};
+
+// Fonction pour jouer un son
+const playSound = (soundName) => {
+  if (!soundEnabled.value) return; // Ne pas jouer si les sons sont désactivés
+  
+  const sound = new Audio(sounds[soundName]);
+  sound.volume = 0.6; // Volume à 60%
+  try {
+    sound.play();
+  } catch (err) {
+    console.error('Erreur lors de la lecture du son:', err);
+  }
+};
 
 const props = defineProps({
   difficulty: {
@@ -1168,6 +1221,31 @@ watch(gridSize, () => {
   box-shadow: var(--shadow-sm);
 }
 
+/* Styles optimisés pour mobile */
+.mobile-friendly {
+  min-height: 45px;
+  min-width: 45px;
+  font-size: 1rem;
+  border-radius: var(--radius-sm);
+  margin: 2px;
+}
+
+@media (max-width: 768px) {
+  .puzzle-tile {
+    font-size: 0.9rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .mobile-friendly {
+    min-height: 40px;
+    min-width: 40px;
+  }
+  
+  .puzzle-tile i {
+    font-size: 1rem;
+  }
+}
+
 .animate-move {
   animation: tileMove 0.3s ease-out;
 }
@@ -1330,6 +1408,33 @@ watch(gridSize, () => {
   transform: scale(1.1);
 }
 
+.puzzle-tile:hover .stat-icon {
+  transform: scale(1.05);
+}
+
+.sound-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: var(--bg-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.sound-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+.sound-toggle i {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
 .tile-number {
   font-size: 1.1rem;
   font-weight: bold;
@@ -1445,6 +1550,65 @@ watch(gridSize, () => {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
+}
+
+.difficulty-selection {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.difficulty-selection h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.grid-size-options {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.grid-size-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.grid-size-button.selected {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.grid-size-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.grid-size-button .difficulty-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .grid-size-options {
+    flex-wrap: wrap;
+  }
+  
+  .grid-size-button {
+    padding: 0.6rem 1.2rem;
+  }
 }
 
 .theme-grid {
