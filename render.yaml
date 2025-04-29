@@ -4,7 +4,7 @@ services:
   - type: web
     name: birth-app
     env: node
-    plan: starter # Ou free pour commencer
+    plan: free # Plan gratuit de Render
     buildCommand: npm install && npm run build
     startCommand: NODE_ENV=production node server.js
     envVars:
@@ -17,8 +17,5 @@ services:
       - key: FRONTEND_URL
         value: "https://birth-app.onrender.com"
     
-    # Configuration pour gérer les uploads de fichiers
-    disk:
-      name: uploads
-      mountPath: /opt/render/project/src/uploads
-      sizeGB: 1 # 1GB d'espace de stockage, ajustez selon vos besoins
+    # Note: Utilisation du stockage temporaire pour les uploads
+    # Les fichiers seront perdus lors des redéploiements
