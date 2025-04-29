@@ -11,7 +11,7 @@ const app = express();
 
 // Configuration CORS
 app.use(cors({
-  origin: ['https://markupbirt.netlify.app', 'https://markupbirth.netlify.app', 'http://localhost:3000'],
+  origin: ['https://markupbirt.netlify.app', 'https://markupbirth.netlify.app', 'https://birth-6syx.netlify.app', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true

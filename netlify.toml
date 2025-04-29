@@ -13,4 +13,4 @@
 
 # Variables d'environnement pour la production
 [context.production.environment]
-  API_URL = "https://birth-app.onrender.com"  # Mettez à jour avec l'URL de votre API sur Render
+  API_URL = "https://birth-app-6syx.onrender.com"  # URL mise à jour de l'API sur Render

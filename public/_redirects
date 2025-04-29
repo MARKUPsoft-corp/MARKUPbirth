@@ -2,5 +2,5 @@
 /*    /index.html   200
 
 # Redirection des appels API vers Render
-/api/*  https://birth-app.onrender.com/:splat  200
-/socket.io/*  https://birth-app.onrender.com/socket.io/:splat  200
+/api/*  https://birth-app-6syx.onrender.com/:splat  200
+/socket.io/*  https://birth-app-6syx.onrender.com/socket.io/:splat  200

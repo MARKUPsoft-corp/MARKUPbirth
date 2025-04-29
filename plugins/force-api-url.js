@@ -7,7 +7,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       if (typeof url === 'string') {
         // Remplacer les URL localhost par l'URL Render
         if (url.includes('localhost:3001')) {
-          const newUrl = url.replace('http://localhost:3001', 'https://birth-app.onrender.com');
+          const newUrl = url.replace('http://localhost:3001', 'https://birth-app-6syx.onrender.com');
           console.log(`Redirection de ${url} vers ${newUrl}`);
           return originalFetch(newUrl, options);
         }
@@ -16,7 +16,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     };
 
     // Forcer l'URL pour Socket.io également
-    window.__force_api_url = 'https://birth-app.onrender.com';
+    window.__force_api_url = 'https://birth-app-6syx.onrender.com';
     
     console.log('Plugin force-api-url activé : redirection des requêtes vers Render');
   }

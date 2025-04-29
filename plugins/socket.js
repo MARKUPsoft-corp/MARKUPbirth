@@ -4,7 +4,7 @@ import { getApiUrl, getSocketConfig } from '../api.config';
 
 export default defineNuxtPlugin((nuxtApp) => {
   // Déterminer l'URL du serveur Socket.IO
-  let socketUrl = 'https://birth-app.onrender.com';
+  let socketUrl = 'https://birth-app-6syx.onrender.com';
   
   // En développement local uniquement, utiliser localhost
   if (typeof window !== 'undefined' && 
