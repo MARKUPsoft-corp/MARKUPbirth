@@ -1,9 +1,9 @@
 [build]
-  command = "npm run generate"
+  command = "bash ./netlify-build.sh"
   publish = "dist"
   
 [build.environment]
-  NODE_VERSION = "16"
+  NODE_VERSION = "18"
 
 # Configuration des redirects pour gérer les routes SPA
 [[redirects]]
