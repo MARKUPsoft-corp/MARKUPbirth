@@ -362,11 +362,11 @@ header {
   }
   
   .navbar-brand {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
   
   .navbar-brand i {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
   
   .nav-links li a {
@@ -403,11 +403,16 @@ header {
 }
 
 @media (max-width: 360px) {
-  .navbar-brand span {
+  .navbar-brand {
     max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 1.2rem;
+  }
+  
+  .navbar-brand i {
+    font-size: 1.4rem;
   }
   
   .nav-links {

@@ -168,8 +168,53 @@ const spawnTargets = () => {
   }, config.value.spawnRate);
 };
 
+// Créer l'effet d'éclatement avec des particules
+const createBurstEffect = (x, y, color) => {
+  const gameBoard = document.querySelector('.game-board');
+  if (!gameBoard) return;
+  
+  // Position relative par rapport au gameBoard
+  const rect = gameBoard.getBoundingClientRect();
+  const relX = (x / 100) * rect.width;
+  const relY = (y / 100) * rect.height;
+  
+  // Créer plusieurs particules
+  for (let i = 0; i < 12; i++) {
+    const particle = document.createElement('div');
+    particle.classList.add('animate-particle');
+    particle.style.backgroundColor = color;
+    particle.style.left = `${relX}px`;
+    particle.style.top = `${relY}px`;
+    
+    // Direction aléatoire pour chaque particule
+    const angle = Math.random() * Math.PI * 2; // angle aléatoire entre 0 et 2π
+    const distance = 30 + Math.random() * 70; // distance aléatoire
+    
+    // Définir la direction de déplacement avec CSS variables
+    particle.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+    particle.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+    
+    // Ajouter la particule à la board
+    gameBoard.appendChild(particle);
+    
+    // Supprimer la particule après l'animation
+    setTimeout(() => {
+      if (particle.parentNode === gameBoard) {
+        gameBoard.removeChild(particle);
+      }
+    }, 600);
+  }
+};
+
 // Cliquer sur une cible
 const clickTarget = (index) => {
+  // Récupérer les infos de la cible avant de la supprimer
+  const target = targets.value[index];
+  const { x, y, color } = target;
+  
+  // Créer l'effet d'éclatement
+  createBurstEffect(x, y, color);
+  
   // Incrémenter le score
   score.value++;
   

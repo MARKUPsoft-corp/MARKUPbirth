@@ -59,6 +59,34 @@
   }
 }
 
+/* Animation d'éclatement */
+@keyframes burst {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* Animation de particules */
+@keyframes particle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x, 50px), var(--y, 50px)) scale(0);
+    opacity: 0;
+  }
+}
+
 /* Classes d'animation */
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out forwards;
@@ -74,6 +102,19 @@
 
 .animate-rotate {
   animation: rotate 20s linear infinite;
+}
+
+.animate-burst {
+  animation: burst 0.3s ease-out forwards;
+}
+
+.animate-particle {
+  animation: particle 0.6s ease-out forwards;
+  position: absolute;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
 }
 
 /* Délais d'animation */

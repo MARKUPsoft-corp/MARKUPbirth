@@ -64,19 +64,7 @@
         
         <MemoryGame v-if="activeGame === 'memory'" @game-won="handleGameComplete" />
         <SpeedClickGame v-else-if="activeGame === 'speedclick'" @game-over="handleGameComplete" />
-        
-        <!-- Placeholder pour le puzzle (à implémenter plus tard) -->
-        <div v-else-if="activeGame === 'puzzle'" class="placeholder-game">
-          <div class="placeholder-icon">
-            <i class="bi bi-grid-3x3"></i>
-          </div>
-          <h2>Puzzle Coulissant</h2>
-          <p>Ce jeu est en cours de développement. Revenez bientôt pour y jouer !</p>
-          <button class="back-link" @click="activeGame = null">
-            <i class="bi bi-arrow-left"></i>
-            Retour aux jeux
-          </button>
-        </div>
+        <PuzzleGame v-else-if="activeGame === 'puzzle'" @game-won="handleGameComplete" />
       </div>
     </div>
   </div>
@@ -86,6 +74,7 @@
 import { ref, onMounted } from 'vue';
 import MemoryGame from '~/components/games/MemoryGame.vue';
 import SpeedClickGame from '~/components/games/SpeedClickGame.vue';
+import PuzzleGame from '~/components/games/PuzzleGame.vue';
 
 // État local
 const activeGame = ref(null);
@@ -250,6 +239,7 @@ const handleGameComplete = (result) => {
   color: #333;
   background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
   display: inline-block;
@@ -422,11 +412,73 @@ const handleGameComplete = (result) => {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
+  
+  .game-card-header {
+    padding: 1.4rem;
+  }
+  
+  .game-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+  }
+  
+  .game-title {
+    font-size: 1.3rem;
+  }
+  
+  .game-card-content {
+    padding: 1.5rem;
+  }
+  
+  .game-description {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 480px) {
   .games-grid {
     margin: 1.5rem 0;
+    gap: 1.2rem;
+  }
+  
+  .game-card {
+    border-radius: 12px;
+  }
+  
+  .game-card-header {
+    padding: 1.2rem;
+    gap: 0.8rem;
+  }
+  
+  .game-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+  }
+  
+  .game-title {
+    font-size: 1.1rem;
+  }
+  
+  .game-card-content {
+    padding: 1.2rem;
+  }
+  
+  .game-description {
+    margin-bottom: 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .play-button {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  .play-button i {
+    font-size: 1rem;
   }
 }
 
