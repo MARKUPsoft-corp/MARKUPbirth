@@ -14,7 +14,7 @@ const app = express();
 
 // Configurer CORS pour autoriser explicitement le domaine Netlify
 app.use(cors({
-  origin: ['https://markupbirth.netlify.app', 'http://localhost:3000'],
+  origin: ['https://markupbirt.netlify.app', 'https://markupbirth.netlify.app', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -22,7 +22,12 @@ app.use(cors({
 
 // Ajouter des en-têtes CORS manuellement pour s'assurer qu'ils sont bien configurés
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://markupbirth.netlify.app');
+  const origin = req.headers.origin;
+  if (origin === 'https://markupbirt.netlify.app' || origin === 'https://markupbirth.netlify.app' || origin === 'http://localhost:3000') {
+    res.header('Access-Control-Allow-Origin', origin);
+  } else {
+    res.header('Access-Control-Allow-Origin', 'https://markupbirt.netlify.app');
+  }
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
