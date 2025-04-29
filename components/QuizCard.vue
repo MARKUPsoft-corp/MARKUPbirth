@@ -63,10 +63,14 @@ const props = defineProps({
   question: {
     type: Object,
     required: true
+  },
+  isLastQuestion: {
+    type: Boolean,
+    default: false
   }
 });
 
-const emit = defineEmits(['answer-selected']);
+const emit = defineEmits(['answer-selected', 'quiz-completed']);
 
 const config = useRuntimeConfig();
 const apiBaseUrl = String(config.public.apiBaseUrl);
@@ -91,12 +95,20 @@ const selectAnswer = async (index) => {
   // Emit the answer to parent
   emit('answer-selected', index);
   
-  // After a delay, move to next question
+  // Si c'est la dernière question, passer aux résultats après un délai court
+  const delay = props.isLastQuestion ? 500 : 2000;
+  
   setTimeout(() => {
+    // Si dernière question, émettre quiz-completed
+    if (props.isLastQuestion) {
+      emit('quiz-completed');
+    }
+    
+    // Réinitialiser l'état
     answered.value = false;
     userAnswer.value = null;
     answerResult.value = false;
-  }, 2000);
+  }, delay);
 };
 </script>
 

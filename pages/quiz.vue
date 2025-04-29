@@ -107,19 +107,21 @@
           </div>
           
           <!-- Quiz questions -->
-          <div v-else-if="!isQuizCompleted && currentQuestion" class="fade-in">
+          <div v-else-if="!manualCompleted && !isQuizCompleted && currentQuestion" class="fade-in">
             <div class="question-header">
               <span class="question-badge">Question {{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
             </div>
             
             <QuizCard 
               :question="currentQuestion" 
+              :is-last-question="currentQuestionIndex === questions.length - 1"
               @answer-selected="submitAnswer"
+              @quiz-completed="completeQuiz"
             />
           </div>
           
           <!-- Quiz results -->
-          <div v-else-if="isQuizCompleted" class="quiz-result fade-in">
+          <div v-else-if="manualCompleted || isQuizCompleted" class="quiz-result fade-in">
             <div class="quiz-card">
               <div class="card-header">
                 <div class="card-header-icon">
@@ -229,7 +231,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, computed, ref, watch } from 'vue';
 import { useQuizStore } from '~/stores/quiz';
 
 // Get quiz store
@@ -252,6 +254,7 @@ const topResults = computed(() => quizStore.topResults);
 
 // State
 const started = ref(false);
+const manualCompleted = ref(false);
 
 // Fetch quiz questions
 onMounted(() => {
@@ -310,6 +313,28 @@ const shareResults = async () => {
 const resetQuiz = () => {
   quizStore.resetQuiz();
   started.value = false;
+};
+
+// Watcher pour détecter la fin du quiz et soumettre les résultats
+watch(isQuizCompleted, async (newValue) => {
+  if (newValue === true) {
+    // Le quiz est terminé, soumettre les résultats automatiquement
+    await quizStore.submitQuizResult();
+    // Rafraîchir les résultats
+    await fetchTopResults();
+  }
+});
+
+// Complete the quiz
+const completeQuiz = async () => {
+  // Forcer l'affichage des résultats
+  manualCompleted.value = true;
+  
+  // Soumettre les résultats
+  await quizStore.submitQuizResult();
+  
+  // Rafraîchir les résultats
+  await fetchTopResults();
 };
 </script>
 

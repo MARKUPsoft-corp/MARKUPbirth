@@ -90,10 +90,8 @@ export const useQuizStore = defineStore('quiz', () => {
         answerIndex
       });
       
-      // Move to next question
-      if (currentQuestionIndex.value < questions.value.length - 1) {
-        currentQuestionIndex.value++;
-      }
+      // Toujours incrémenter l'index, même pour la dernière question
+      currentQuestionIndex.value++;
       
       return response.isCorrect;
     } catch (err: any) {
@@ -161,6 +159,11 @@ export const useQuizStore = defineStore('quiz', () => {
     joinRoom('quiz');
   };
   
+  // Force quiz completion
+  const forceQuizCompletion = () => {
+    currentQuestionIndex.value = questions.value.length;
+  };
+  
   return {
     questions,
     currentQuestionIndex,
@@ -179,6 +182,7 @@ export const useQuizStore = defineStore('quiz', () => {
     fetchTopResults,
     resetQuiz,
     setUsername,
-    setupSocketConnection
+    setupSocketConnection,
+    forceQuizCompletion
   };
 }); 
