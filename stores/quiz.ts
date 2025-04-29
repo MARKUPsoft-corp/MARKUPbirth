@@ -23,12 +23,82 @@ interface QuizResult {
   badge: string;
 }
 
-// Importer les questions depuis un fichier séparé pour faciliter les ajouts futurs
-import { quizQuestions } from '~/data/quiz-questions';
-
 export const useQuizStore = defineStore('quiz', () => {
   // Base de questions enrichie pour le quiz
-  const questions = ref<QuizQuestion[]>(quizQuestions);
+  const questions = ref<QuizQuestion[]>([
+    {
+      id: 1,
+      question: "Quelle est ma date de naissance ?",
+      options: ["1er janvier 1998", "15 mars 2000", "30 avril 2001", "22 décembre 2003"],
+      answer: 2,
+      explanation: "Je suis est né le 30 avril 2001.",
+      category: "Personnel",
+      difficulty: "facile"
+    },
+    {
+      id: 2,
+      question: "Quel mon plat préféré ?",
+      options: ["Pizza", "Koki", "Taro", "Hambuger"],
+      answer: 1,
+      explanation: "Le Koki est mon deux place depuis la nuit des temps",
+      category: "Gastronomie",
+      difficulty: "moyen"
+    },
+    {
+      id: 3,
+      question: "Quel sport je pratique régulièrement ?",
+      options: ["Football", "Basketball", "Tennis", "Street workout"],
+      answer: 3,
+      explanation: "Je suis un passionné de street workout et pratique ce sport régulièrement.",
+      category: "Loisirs",
+      difficulty: "moyen"
+    },
+    {
+      id: 4,
+      question: "Quelle est ma couleur préférée ?",
+      options: ["Rouge", "Bleu", "Vert", "Noir"],
+      answer: 2,
+      explanation: "Le bleu est ma couleur préférée .",
+      category: "Personnel",
+      difficulty: "facile"
+    },
+    {
+      id: 5,
+      question: "Quel est mon film préféré ?",
+      options: ["Star Wars", "Le Parrain", "Avenger Endgame", "Matrix"],
+      answer: 2,
+      explanation: "Avenger Endgame, réalisé par Marvel, mon film préféré .",
+      category: "Divertissement",
+      difficulty: "moyen"
+    },
+    {
+      id: 6,
+      question: "Quel est le pays que rêve que je souhaiterais visiter ?",
+      options: ["Australie", "Brésil", "Nouvelle-Zélande", "Egypte"],
+      answer: 0,
+      explanation: "Australie, mon pays rêvé .",
+      category: "Voyages",
+      difficulty: "difficile"
+    },
+    {
+      id: 7,
+      question: "Quel est mon animal préféré ?",
+      options: ["Chien", "Chat", "Dauphin", "Aigle"],
+      answer: 2,
+      explanation: "je suis fasciné par l'intelligence des dauphins.",
+      category: "Animaux",
+      difficulty: "difficile"
+    },
+    {
+      id: 8,
+      question: "Quelle musique  j'écoute le plus souvent ?",
+      options: ["Rock", "Jazz", "Hip-hop", "Classique"],
+      answer: 1,
+      explanation: "J'apprécie particulièrement le jazz et son improvisation.",
+      category: "Musique",
+      difficulty: "moyen"
+    }
+  ]);
   
   // État du quiz
   const shuffledQuestions = ref<QuizQuestion[]>([]);
@@ -75,7 +145,7 @@ export const useQuizStore = defineStore('quiz', () => {
   };
   
   // Initialisation du quiz
-  const initializeQuiz = () => {
+  const initializeQuiz = () => { 
     let selectedQuestions = [...questions.value];
     
     // Mélanger les questions si l'option est activée
