@@ -1,198 +1,268 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
+// Types pour le nouveau quiz
 interface QuizQuestion {
   id: number;
   question: string;
   options: string[];
-  answer?: number;
+  answer: number;
+  explanation?: string;
   image?: string;
+  category?: string;
+  difficulty?: 'facile' | 'moyen' | 'difficile';
 }
 
 interface QuizResult {
-  id: number;
   username: string;
   score: number;
+  totalQuestions: number;
+  category?: string;
+  date: string;
+  timeSpent: number;
   badge: string;
-  createdAt: string;
 }
 
 export const useQuizStore = defineStore('quiz', () => {
+  // Base de questions enrichie pour le quiz
   const questions = ref<QuizQuestion[]>([
     {
       id: 1,
       question: "Quelle est la date de naissance d'Emmanuel ?",
       options: ["1er janvier", "15 mars", "30 avril", "22 décembre"],
-      answer: 2
+      answer: 2,
+      explanation: "Emmanuel est né le 30 avril.",
+      category: "Personnel",
+      difficulty: "facile"
     },
     {
       id: 2,
       question: "Quel est le plat préféré d'Emmanuel ?",
       options: ["Pizza", "Poulet DG", "Sushi", "Lasagnes"],
-      answer: 1
+      answer: 1,
+      explanation: "Le Poulet DG (Directeur Général) est un plat traditionnel camerounais très apprécié d'Emmanuel.",
+      category: "Gastronomie",
+      difficulty: "moyen"
     },
     {
       id: 3,
       question: "Quel sport Emmanuel pratique-t-il régulièrement ?",
       options: ["Football", "Basketball", "Tennis", "Natation"],
-      answer: 3
+      answer: 3,
+      explanation: "Emmanuel est un passionné de natation et pratique ce sport régulièrement.",
+      category: "Loisirs",
+      difficulty: "moyen"
+    },
+    {
+      id: 4,
+      question: "Quelle est la couleur préférée d'Emmanuel ?",
+      options: ["Rouge", "Bleu", "Vert", "Noir"],
+      answer: 1,
+      explanation: "Le bleu est la couleur préférée d'Emmanuel.",
+      category: "Personnel",
+      difficulty: "facile"
+    },
+    {
+      id: 5,
+      question: "Quel est le film préféré d'Emmanuel ?",
+      options: ["Star Wars", "Le Parrain", "Inception", "Matrix"],
+      answer: 2,
+      explanation: "Inception, réalisé par Christopher Nolan, est le film préféré d'Emmanuel.",
+      category: "Divertissement",
+      difficulty: "moyen"
+    },
+    {
+      id: 6,
+      question: "Quel est le pays que rêve de visiter Emmanuel ?",
+      options: ["Japon", "Brésil", "Nouvelle-Zélande", "Egypte"],
+      answer: 0,
+      explanation: "Le Japon et sa culture fascinante sont en tête de la liste des voyages rêvés d'Emmanuel.",
+      category: "Voyages",
+      difficulty: "difficile"
+    },
+    {
+      id: 7,
+      question: "Quel animal Emmanuel préfère-t-il ?",
+      options: ["Chien", "Chat", "Dauphin", "Aigle"],
+      answer: 2,
+      explanation: "Emmanuel est fasciné par l'intelligence des dauphins.",
+      category: "Animaux",
+      difficulty: "difficile"
+    },
+    {
+      id: 8,
+      question: "Quelle musique Emmanuel écoute-t-il le plus souvent ?",
+      options: ["Rock", "Jazz", "Hip-hop", "Classique"],
+      answer: 1,
+      explanation: "Emmanuel apprécie particulièrement le jazz et son improvisation.",
+      category: "Musique",
+      difficulty: "moyen"
     }
   ]);
   
+  // État du quiz
+  const shuffledQuestions = ref<QuizQuestion[]>([]);
   const currentQuestionIndex = ref(0);
   const userAnswers = ref<number[]>([]);
+  const username = ref('');
+  const startTime = ref(0);
+  const elapsedTime = ref(0);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
-  const topResults = ref<QuizResult[]>([
-    {
-      id: 1,
-      username: "Alice",
-      score: 85,
-      badge: "🥈 Argent",
-      createdAt: new Date().toISOString()
-    },
-    {
-      id: 2,
-      username: "Bob",
-      score: 92,
-      badge: "🏆 Or",
-      createdAt: new Date().toISOString()
-    },
-    {
-      id: 3,
-      username: "Charlie",
-      score: 78,
-      badge: "🥉 Bronze",
-      createdAt: new Date().toISOString()
-    }
-  ]);
-  const username = ref('');
+  const quizCompleted = ref(false);
+  const lastResults = ref<QuizResult | null>(null);
   
-  // Computed properties
-  const currentQuestion = computed(() => 
-    questions.value[currentQuestionIndex.value] || null
-  );
-  
-  const isQuizCompleted = computed(() => 
-    currentQuestionIndex.value >= questions.value.length && 
-    userAnswers.value.length === questions.value.length
-  );
+  // Fonctions et propriétés calculées
+  const currentQuestion = computed(() => shuffledQuestions.value[currentQuestionIndex.value]);
+  const isQuizCompleted = computed(() => quizCompleted.value);
+  const totalQuestions = computed(() => shuffledQuestions.value.length);
   
   const score = computed(() => {
-    if (!questions.value.length) return 0;
+    if (userAnswers.value.length === 0) return 0;
     
     return userAnswers.value.reduce((total, userAnswer, index) => {
-      const correctAnswer = questions.value[index]?.answer;
+      const correctAnswer = shuffledQuestions.value[index].answer;
       return total + (userAnswer === correctAnswer ? 1 : 0);
     }, 0);
   });
+
+  const scorePercentage = computed(() => {
+    if (userAnswers.value.length === 0) return 0;
+    return Math.round((score.value / totalQuestions.value) * 100);
+  });
   
-  // Initialisation
-  const initializeQuiz = () => {
-    // Préparer le tableau des réponses utilisateur
-    userAnswers.value = new Array(questions.value.length).fill(-1);
-    currentQuestionIndex.value = 0;
-  };
-  
-  // Détermine le badge en fonction du score
-  const getBadgeForScore = (score: number) => {
-    if (score >= 90) return "🏆 Or";
-    if (score >= 70) return "🥈 Argent";
-    if (score >= 50) return "🥉 Bronze";
+  const badge = computed(() => {
+    if (scorePercentage.value >= 90) return "🏆 Or";
+    if (scorePercentage.value >= 70) return "🥈 Argent";
+    if (scorePercentage.value >= 50) return "🥉 Bronze";
     return "👍 Participant";
+  });
+  
+  // Initialisation du quiz
+  const initializeQuiz = () => {
+    // Mélanger les questions pour chaque quiz
+    shuffledQuestions.value = [...questions.value].sort(() => Math.random() - 0.5);
+    
+    // Limiter à 6 questions par quiz
+    shuffledQuestions.value = shuffledQuestions.value.slice(0, 6);
+    
+    // Réinitialiser les réponses utilisateur
+    userAnswers.value = new Array(shuffledQuestions.value.length).fill(-1);
+    currentQuestionIndex.value = 0;
+    quizCompleted.value = false;
+    startTime.value = Date.now();
+    elapsedTime.value = 0;
+    error.value = null;
   };
   
-  // Submit an answer to the current question
+  // Soumettre une réponse à la question actuelle
   const submitAnswer = (answerIndex: number) => {
-    if (currentQuestionIndex.value >= questions.value.length) {
+    if (currentQuestionIndex.value >= shuffledQuestions.value.length || quizCompleted.value) {
       return false;
     }
     
-    // Store the answer
+    // Enregistrer la réponse
     userAnswers.value[currentQuestionIndex.value] = answerIndex;
     
-    // Move to next question
-    if (currentQuestionIndex.value < questions.value.length - 1) {
+    // Passer à la question suivante
+    if (currentQuestionIndex.value < shuffledQuestions.value.length - 1) {
       currentQuestionIndex.value++;
-    }
-    
-    return true;
-  };
-  
-  // Submit quiz result
-  const submitQuizResult = async () => {
-    if (!username.value) {
-      error.value = 'Username is required';
-      return false;
-    }
-
-    isLoading.value = true;
-    error.value = null;
-
-    try {
-      const totalScore = Math.round((score.value / questions.value.length) * 100);
-      
-      const newResult: QuizResult = {
-        id: Date.now(), // Génère un ID unique basé sur le timestamp
-        username: username.value,
-        score: totalScore,
-        badge: getBadgeForScore(totalScore),
-        createdAt: new Date().toISOString()
-      };
-
-      // Ajouter le résultat à notre liste locale
-      topResults.value.push(newResult);
-      
-      // Trier les résultats par score
-      topResults.value.sort((a, b) => b.score - a.score);
-      
-      console.log(`Résultat du quiz enregistré localement: ${username.value} - Score: ${totalScore}`);
       return true;
-    } catch (err: any) {
-      error.value = err.message || 'Failed to submit quiz result';
-      console.error('Error submitting quiz result:', err);
-      return false;
-    } finally {
-      isLoading.value = false;
+    } else {
+      // Terminé - toutes les questions ont été répondues
+      completeQuiz();
+      return true;
     }
   };
   
-  // Reset quiz
-  const resetQuiz = () => {
-    currentQuestionIndex.value = 0;
-    userAnswers.value = new Array(questions.value.length).fill(-1);
+  // Compléter le quiz
+  const completeQuiz = () => {
+    if (quizCompleted.value) return;
+    
+    quizCompleted.value = true;
+    elapsedTime.value = Math.floor((Date.now() - startTime.value) / 1000); // en secondes
+    
+    // Créer un résultat
+    lastResults.value = {
+      username: username.value || 'Anonyme',
+      score: score.value,
+      totalQuestions: totalQuestions.value,
+      category: 'Général',
+      date: new Date().toISOString(),
+      timeSpent: elapsedTime.value,
+      badge: badge.value
+    };
+    
+    // Sauvegarder dans localStorage si nécessaire
+    saveResultToLocalStorage();
+    
+    return lastResults.value;
   };
   
-  // Set username
+  // Enregistrer le résultat dans localStorage
+  const saveResultToLocalStorage = () => {
+    if (!lastResults.value) return;
+    
+    try {
+      const savedResults = localStorage.getItem('quizResults');
+      let resultsArray = [];
+      
+      if (savedResults) {
+        resultsArray = JSON.parse(savedResults);
+      }
+      
+      resultsArray.push(lastResults.value);
+      
+      // Limiter à 10 résultats
+      if (resultsArray.length > 10) {
+        resultsArray = resultsArray.slice(-10);
+      }
+      
+      localStorage.setItem('quizResults', JSON.stringify(resultsArray));
+    } catch (err) {
+      console.error('Erreur lors de la sauvegarde des résultats:', err);
+    }
+  };
+  
+  // Réinitialiser le quiz
+  const resetQuiz = () => {
+    initializeQuiz();
+  };
+  
+  // Définir le nom d'utilisateur
   const setUsername = (newUsername: string) => {
     username.value = newUsername;
   };
-  
-  // Force quiz completion
-  const forceQuizCompletion = () => {
-    currentQuestionIndex.value = questions.value.length;
-  };
-  
-  // Appel automatique à l'initialisation
+
+  // Initialisation automatique
   initializeQuiz();
   
+  // Fonctions et propriétés exportées
   return {
-    questions,
+    // État
+    questions: shuffledQuestions,
     currentQuestionIndex,
-    currentQuestion,
     userAnswers,
+    username,
     isLoading,
     error,
-    score,
-    topResults,
-    isQuizCompleted,
-    username,
+    quizCompleted,
+    lastResults,
+    elapsedTime,
     
+    // Calculés
+    currentQuestion,
+    isQuizCompleted,
+    score,
+    scorePercentage,
+    badge,
+    totalQuestions,
+    
+    // Actions
+    initializeQuiz,
     submitAnswer,
-    submitQuizResult,
+    completeQuiz,
     resetQuiz,
-    setUsername,
-    forceQuizCompletion,
-    initializeQuiz
+    setUsername
   };
 });
