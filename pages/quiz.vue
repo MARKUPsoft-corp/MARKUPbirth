@@ -175,13 +175,9 @@
                 </p>
                 
                 <div class="button-group">
-                  <button @click="resetQuiz" class="secondary-button">
+                  <button @click="resetQuiz" class="start-button">
                     <i class="bi bi-arrow-repeat"></i>
                     Recommencer
-                  </button>
-                  <button @click="shareResults" class="share-button">
-                    <i class="bi bi-share"></i>
-                    Partager
                   </button>
                 </div>
               </div>
@@ -285,28 +281,6 @@ const submitAnswer = async (answerIndex) => {
   const result = await quizStore.submitAnswer(answerIndex);
   // Renvoyer le résultat au QuizCard
   return result;
-};
-
-// Share quiz results
-const shareResults = async () => {
-  // First, submit the result
-  await quizStore.submitQuizResult();
-  
-  // Refresh top results
-  fetchTopResults();
-  
-  // Then share (example: copy to clipboard)
-  const shareText = `J'ai obtenu ${score.value}/${questions.value.length} au quiz "Connais-tu Emmanuel?" et gagné le badge "${badge.value}" ! Essayez de battre mon score !`;
-  
-  try {
-    await navigator.clipboard.writeText(shareText);
-    alert('Résultat copié dans le presse-papier ! Partagez-le avec vos amis.');
-  } catch (err) {
-    console.error('Erreur de copie:', err);
-    
-    // Fallback
-    prompt('Copiez ce texte pour partager vos résultats:', shareText);
-  }
 };
 
 // Reset quiz
