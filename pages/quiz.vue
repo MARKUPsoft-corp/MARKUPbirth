@@ -388,20 +388,24 @@ const submitAnswer = () => {
     }, 1500);
   }
   
-  // Stocker la réponse dans le store
-  quizStore.submitAnswer(selectedAnswer.value);
+  // Enregistrer la réponse dans le store 
+  // Mais sans passer à la question suivante automatiquement
+  userAnswers.value[currentQuestionIndex.value] = selectedAnswer.value;
 };
 
 // Passer à la question suivante
 const nextQuestion = () => {
   if (currentQuestionIndex.value < totalQuestions.value - 1) {
+    // Utiliser la méthode du store pour passer à la question suivante
+    quizStore.submitAnswer(selectedAnswer.value);
     showExplanation.value = false;
     selectedAnswer.value = -1; // Réinitialiser la réponse sélectionnée
-    quizStore.currentQuestionIndex++; // Avancer à la question suivante
     playSound('click');
   } else {
-    // Fin du quiz
+    // Fin du quiz - s'assurer que toutes les réponses sont enregistrées avant de terminer
+    quizStore.submitAnswer(selectedAnswer.value); // Soumettre la dernière réponse
     showExplanation.value = false;
+    // On utilise directement le store pour afficher l'écran de fin
     quizStore.completeQuiz();
     playSound('complete');
   }
@@ -415,6 +419,14 @@ const resetQuiz = () => {
   showExplanation.value = false;
   playSound('click');
 };
+
+// Réagir aux changements d'index de question du store
+watch(() => quizStore.currentQuestionIndex, (newIndex) => {
+  // Mettre à jour l'index local lorsque le store change
+  if (currentQuestionIndex.value !== newIndex) {
+    currentQuestionIndex.value = newIndex;
+  }
+});
 
 // Initialisation du quiz
 onMounted(() => {
@@ -1512,12 +1524,17 @@ input:checked + .slider:before {
   }
   
   .quiz-content {
-    padding: 0 1rem;
+    padding: 0 0.7rem;
+    max-width: 100%;
   }
   
   .quiz-card, .question-card {
     padding: 2rem;
     border-radius: 1rem;
+    width: calc(100% - 1rem);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .card-header-icon {
@@ -1592,23 +1609,54 @@ input:checked + .slider:before {
     font-size: 1rem;
   }
   
+  .quiz-content {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .quiz-card, .question-card {
+    padding: 1.5rem;
+    border-radius: 0.8rem;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  }
+  
   .question-text {
     font-size: 1.1rem;
+    padding: 0;
+    margin-bottom: 1.5rem;
   }
   
   .option-item {
     padding: 0.8rem 1rem;
+    margin-bottom: 0.7rem;
   }
   
   .option-letter {
     width: 1.5rem;
     height: 1.5rem;
     font-size: 0.8rem;
+    margin-right: 0.3rem;
   }
   
-  .submit-button, .next-button {
+  .option-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  
+  .submit-button, .next-button, .retry-button {
     padding: 0.7rem 1.5rem;
     font-size: 1rem;
+    width: 100%;
+    border-radius: 0.8rem;
+  }
+  
+  .question-controls {
+    width: 100%;
   }
   
   .card-header-icon {
@@ -1618,6 +1666,14 @@ input:checked + .slider:before {
   
   .card-header-icon i {
     font-size: 1.8rem;
+  }
+  
+  .quiz-card-title {
+    font-size: 1.5rem;
+  }
+  
+  .quiz-description {
+    font-size: 1rem;
   }
   
   .result-header-icon {
@@ -1630,15 +1686,20 @@ input:checked + .slider:before {
   }
   
   .score-circle {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
   }
   
   .score-number {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
   
   .score-fractional {
+    font-size: 0.9rem;
+  }
+  
+  .result-badge {
+    padding: 0.5rem 1.2rem;
     font-size: 0.9rem;
   }
   
@@ -1649,6 +1710,15 @@ input:checked + .slider:before {
   
   .floating-icon, .header-icon {
     display: none;
+  }
+  
+  .explanation-box {
+    padding: 0.8rem;
+    margin: 1rem 0;
+  }
+  
+  .explanation-content {
+    font-size: 0.9rem;
   }
 }
 </style>

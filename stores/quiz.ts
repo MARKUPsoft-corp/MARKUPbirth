@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
 // Types pour le nouveau quiz
-interface QuizQuestion {
+export interface QuizQuestion {
   id: number;
   question: string;
   options: string[];
@@ -23,82 +23,12 @@ interface QuizResult {
   badge: string;
 }
 
+// Importer les questions depuis un fichier séparé pour faciliter les ajouts futurs
+import { quizQuestions } from '~/data/quiz-questions';
+
 export const useQuizStore = defineStore('quiz', () => {
   // Base de questions enrichie pour le quiz
-  const questions = ref<QuizQuestion[]>([
-    {
-      id: 1,
-      question: "Quelle est la date de naissance d'Emmanuel ?",
-      options: ["1er janvier", "15 mars", "30 avril", "22 décembre"],
-      answer: 2,
-      explanation: "Emmanuel est né le 30 avril.",
-      category: "Personnel",
-      difficulty: "facile"
-    },
-    {
-      id: 2,
-      question: "Quel est le plat préféré d'Emmanuel ?",
-      options: ["Pizza", "Poulet DG", "Sushi", "Lasagnes"],
-      answer: 1,
-      explanation: "Le Poulet DG (Directeur Général) est un plat traditionnel camerounais très apprécié d'Emmanuel.",
-      category: "Gastronomie",
-      difficulty: "moyen"
-    },
-    {
-      id: 3,
-      question: "Quel sport Emmanuel pratique-t-il régulièrement ?",
-      options: ["Football", "Basketball", "Tennis", "Natation"],
-      answer: 3,
-      explanation: "Emmanuel est un passionné de natation et pratique ce sport régulièrement.",
-      category: "Loisirs",
-      difficulty: "moyen"
-    },
-    {
-      id: 4,
-      question: "Quelle est la couleur préférée d'Emmanuel ?",
-      options: ["Rouge", "Bleu", "Vert", "Noir"],
-      answer: 1,
-      explanation: "Le bleu est la couleur préférée d'Emmanuel.",
-      category: "Personnel",
-      difficulty: "facile"
-    },
-    {
-      id: 5,
-      question: "Quel est le film préféré d'Emmanuel ?",
-      options: ["Star Wars", "Le Parrain", "Inception", "Matrix"],
-      answer: 2,
-      explanation: "Inception, réalisé par Christopher Nolan, est le film préféré d'Emmanuel.",
-      category: "Divertissement",
-      difficulty: "moyen"
-    },
-    {
-      id: 6,
-      question: "Quel est le pays que rêve de visiter Emmanuel ?",
-      options: ["Japon", "Brésil", "Nouvelle-Zélande", "Egypte"],
-      answer: 0,
-      explanation: "Le Japon et sa culture fascinante sont en tête de la liste des voyages rêvés d'Emmanuel.",
-      category: "Voyages",
-      difficulty: "difficile"
-    },
-    {
-      id: 7,
-      question: "Quel animal Emmanuel préfère-t-il ?",
-      options: ["Chien", "Chat", "Dauphin", "Aigle"],
-      answer: 2,
-      explanation: "Emmanuel est fasciné par l'intelligence des dauphins.",
-      category: "Animaux",
-      difficulty: "difficile"
-    },
-    {
-      id: 8,
-      question: "Quelle musique Emmanuel écoute-t-il le plus souvent ?",
-      options: ["Rock", "Jazz", "Hip-hop", "Classique"],
-      answer: 1,
-      explanation: "Emmanuel apprécie particulièrement le jazz et son improvisation.",
-      category: "Musique",
-      difficulty: "moyen"
-    }
-  ]);
+  const questions = ref<QuizQuestion[]>(quizQuestions);
   
   // État du quiz
   const shuffledQuestions = ref<QuizQuestion[]>([]);
@@ -138,13 +68,23 @@ export const useQuizStore = defineStore('quiz', () => {
     return "👍 Participant";
   });
   
+  // Configuration du quiz
+  const quizConfig = {
+    questionsPerQuiz: 6, // Nombre de questions par quiz - facilement modifiable
+    shuffleQuestions: true // Mélanger les questions - facilement modifiable
+  };
+  
   // Initialisation du quiz
   const initializeQuiz = () => {
-    // Mélanger les questions pour chaque quiz
-    shuffledQuestions.value = [...questions.value].sort(() => Math.random() - 0.5);
+    let selectedQuestions = [...questions.value];
     
-    // Limiter à 6 questions par quiz
-    shuffledQuestions.value = shuffledQuestions.value.slice(0, 6);
+    // Mélanger les questions si l'option est activée
+    if (quizConfig.shuffleQuestions) {
+      selectedQuestions = selectedQuestions.sort(() => Math.random() - 0.5);
+    }
+    
+    // Limiter au nombre de questions défini dans la configuration
+    shuffledQuestions.value = selectedQuestions.slice(0, quizConfig.questionsPerQuiz);
     
     // Réinitialiser les réponses utilisateur
     userAnswers.value = new Array(shuffledQuestions.value.length).fill(-1);
@@ -161,11 +101,12 @@ export const useQuizStore = defineStore('quiz', () => {
       return false;
     }
     
-    // Enregistrer la réponse
+    // Enregistrer la réponse pour la question actuelle
     userAnswers.value[currentQuestionIndex.value] = answerIndex;
     
     // Passer à la question suivante
     if (currentQuestionIndex.value < shuffledQuestions.value.length - 1) {
+      // Avancer à la question suivante
       currentQuestionIndex.value++;
       return true;
     } else {
