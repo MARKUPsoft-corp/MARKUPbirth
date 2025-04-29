@@ -1,0 +1,27 @@
+# Configuration Render pour l'application Birth
+services:
+  # Service principal - application complète (frontend + backend)
+  - type: web
+    name: birth-app
+    env: node
+    plan: starter # Ou free pour commencer
+    buildCommand: npm install && npm run build
+    startCommand: NODE_ENV=production node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: API_PORT
+        value: 3001
+      - key: FRONTEND_URL
+        fromService:
+          name: birth-app
+          type: web
+          property: url
+    
+    # Configuration pour gérer les uploads de fichiers
+    disk:
+      name: uploads
+      mountPath: /opt/render/project/src/uploads
+      sizeGB: 1 # 1GB d'espace de stockage, ajustez selon vos besoins

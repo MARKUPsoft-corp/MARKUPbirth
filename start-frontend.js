@@ -1,10 +1,20 @@
 // Script pour démarrer uniquement le frontend Nuxt
 const { spawn } = require('child_process');
 
-console.log('Démarrage du serveur frontend Nuxt...');
-const nuxt = spawn('npx', ['nuxt', 'dev'], {
+// Déterminer si nous sommes en mode production
+const isProd = process.env.NODE_ENV === 'production';
+const port = process.env.PORT || 3000;
+
+console.log(`Démarrage du serveur frontend Nuxt en mode ${isProd ? 'PRODUCTION' : 'DÉVELOPPEMENT'} sur le port ${port}...`);
+
+// Choisir la commande Nuxt en fonction du mode
+const command = isProd ? 'node' : 'npx';
+const args = isProd ? ['.output/server/index.mjs'] : ['nuxt', 'dev'];
+
+const nuxt = spawn(command, args, {
   stdio: 'inherit',
-  shell: true
+  shell: true,
+  env: { ...process.env, PORT: port }
 });
 
 // Capturer les erreurs

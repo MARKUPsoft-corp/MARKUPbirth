@@ -20,9 +20,17 @@ const usersRoutes = require('./routes/users');
 // Initialize Express app
 const app = express();
 const server = http.createServer(app);
+
+// Déterminer les origines autorisées en fonction de l'environnement
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [process.env.FRONTEND_URL || "https://birth-app.onrender.com"] // URL de production
+  : ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8000", "http://127.0.0.1:8000"];
+
+console.log(`Origines CORS autorisées: ${allowedOrigins.join(', ')}`);
+
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:8000", "http://127.0.0.1:8000"],
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"]
