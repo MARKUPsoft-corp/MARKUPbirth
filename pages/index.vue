@@ -47,7 +47,7 @@
           <!-- Compteur 3D -->
           <div class="countdown-3d">
             <div class="countdown-container">
-              <div class="countdown-item glass-effect">
+              <div class="countdown-item glass-effect desktop-only">
                 <div class="countdown-number-3d">
                   <div class="number-wrapper">
                     <span class="number-content">{{ days }}</span>
@@ -55,7 +55,7 @@
                 </div>
                 <span class="countdown-label">Jours</span>
               </div>
-              <div class="countdown-item glass-effect">
+              <div class="countdown-item glass-effect desktop-only">
                 <div class="countdown-number-3d">
                   <div class="number-wrapper">
                     <span class="number-content">{{ hours }}</span>
@@ -669,19 +669,37 @@ onUnmounted(() => {
 }
 
 .main-title {
-  font-size: clamp(2.2rem, 4.5vw, 4.5rem);
+  font-size: clamp(2rem, 4vw, 4rem);
   font-weight: 900;
   line-height: 1.1;
   margin-bottom: clamp(0.3rem, 1vh, 0.8rem);
-  background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: white; /* Couleur de base en cas de problème de rendu */
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.main-title span:first-child {
+  color: white;
+  -webkit-text-fill-color: white;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.7));
+  display: inline-block;
+  letter-spacing: 1px;
+  font-weight: 800;
+}
+
+.main-title span:last-child {
+  background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.7));
+  display: inline-block;
+  letter-spacing: 2px;
+  font-weight: 900;
+  font-size: 110%;
 }
 
 .split-text span {
@@ -698,11 +716,12 @@ onUnmounted(() => {
 
 .subtitle {
   font-size: clamp(0.9rem, 1.8vw, 1.5rem);
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: clamp(0.6rem, 2vh, 1.2rem);
   font-weight: 300;
   opacity: 0;
   transition: opacity 0.8s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .subtitle.fade-in {
@@ -720,7 +739,7 @@ onUnmounted(() => {
 /* Compteur 3D */
 .countdown-3d {
   perspective: 1000px;
-  margin-bottom: clamp(0.6rem, 2vh, 1.2rem);
+  margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
   width: 100%;
 }
 
@@ -736,13 +755,13 @@ onUnmounted(() => {
 }
 
 .countdown-item {
-  width: clamp(70px, 22%, 180px);
-  padding: clamp(0.4rem, 1.5vw, 0.8rem) clamp(0.3rem, 0.8vw, 0.8rem);
+  width: clamp(60px, 20%, 150px);
+  padding: clamp(0.3rem, 1vw, 0.6rem) clamp(0.2rem, 0.6vw, 0.6rem);
   border-radius: 12px;
   text-align: center;
   transform: translateZ(0);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin: 0.3rem;
+  margin: 0.2rem;
 }
 
 .glass-effect {
@@ -798,7 +817,7 @@ onUnmounted(() => {
 }
 
 .number-content {
-  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
   font-weight: 700;
   color: #fff;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -1226,6 +1245,19 @@ onUnmounted(() => {
   
   .feature-card {
     max-width: 100%;
+    margin-bottom: 1.5rem;
+    transform: scale(1.05);
+  }
+  
+  .card-content {
+    padding: 2rem 1.5rem;
+  }
+  
+  .card-icon {
+    width: 90px;
+    height: 90px;
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
   }
   
   .section-title h2 {
@@ -1236,7 +1268,10 @@ onUnmounted(() => {
   .hero-content {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-    height: calc(100vh - 60px); /* Réduire la hauteur pour éviter les marges */
+    height: auto;
+    min-height: calc(100vh - 80px);
+    max-height: unset;
+    overflow: visible;
   }
   
   .main-title {
@@ -1245,8 +1280,8 @@ onUnmounted(() => {
   }
   
   .subtitle {
-    font-size: clamp(1.1rem, 4vw, 1.5rem);
-    margin-bottom: 1rem;
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    margin-bottom: 0.5rem;
   }
   
   .countdown-container {
@@ -1267,13 +1302,47 @@ onUnmounted(() => {
   }
   
   .number-content {
-    font-size: clamp(2.2rem, 8vw, 3rem);
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
     font-weight: 700;
   }
   
   .countdown-label {
     font-size: clamp(0.9rem, 3vw, 1.2rem);
     letter-spacing: 1px;
+  }
+  
+  /* Disposition verticale du timer sur mobile */
+  .countdown-container {
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+  
+  .countdown-item {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.1rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    text-align: center;
+  }
+  
+  .countdown-number-3d {
+    height: auto;
+    margin-bottom: 0.3rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .countdown-label {
+    font-size: 1.1rem;
+    text-align: center;
+    width: 100%;
   }
   
   .scroll-button {
@@ -1326,29 +1395,69 @@ onUnmounted(() => {
   }
   
   .hero-text {
-    padding: 1rem 0.6rem;
+    padding: 1.2rem 0.8rem;
+    max-height: none;
+  }
+  
+  .main-title {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    line-height: 1.2;
+    margin-bottom: 0.3rem;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
   }
   
   .countdown-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    flex-direction: column;
     max-width: 100%;
-    gap: 0.4rem;
+    gap: 0.6rem;
   }
   
   .countdown-item {
     width: 100%;
-    padding: 0.6rem 0.3rem;
-    margin: 0.1rem;
+    padding: 0.8rem 1rem;
+    margin: 0;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   
   .number-content {
-    font-size: clamp(1.8rem, 7vw, 2.2rem);
+    font-size: clamp(1.6rem, 6vw, 2rem);
+    margin: 0 0 0.1rem 0;
+    padding: 0;
   }
   
   .countdown-number-3d {
-    height: 35px;
+    height: auto;
     margin-bottom: 0.2rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .countdown-label {
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    padding: 0;
+    width: 100%;
+  }
+  
+  /* Rendre les cartes plus grandes sur petits écrans */
+  .feature-card {
+    transform: scale(1.08);
+    margin-bottom: 2rem;
+  }
+  
+  .card-content {
+    padding: 2rem 1.5rem;
   }
 }
 
@@ -1443,6 +1552,13 @@ onUnmounted(() => {
 
 .feature-card:hover .card-icon i {
   transform: scale(1.2) rotate(-10deg);
+}
+
+/* Classe pour masquer les éléments sur mobile */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
 }
 
 /* Styles pour le mode compteur actif */
