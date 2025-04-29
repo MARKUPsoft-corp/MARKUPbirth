@@ -1,14 +1,34 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // Configuration pour une application 100% frontend sans SSR
+  ssr: false,
+  
+  // Configuration pour une SPA
+  nitro: {
+    preset: 'static',
+    prerender: {
+      crawlLinks: false,
+    },
+    compatibilityDate: '2024-04-28'
+  },
+  
+  // Optimisations pour une SPA
+  routeRules: {
+    '/**': { static: true }
+  },
+  
   devtools: { enabled: true },
   modules: [
     '@pinia/nuxt',
   ],
+  // 100% frontend sans plugins
+  plugins: [],
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
     'bootstrap-icons/font/bootstrap-icons.css',
     '~/assets/css/main.css',
   ],
+  // Configuration de l'application
   app: {
     head: {
       title: "Anniversaire d'Emmanuel YAKAM TCHAMEGNI",
@@ -52,8 +72,5 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:3001',
       birthdayDate: process.env.BIRTHDAY_DATE || '2023-12-25T00:00:00'
     }
-  },
-  nitro: {
-    compatibilityDate: '2024-04-28'
   }
 });

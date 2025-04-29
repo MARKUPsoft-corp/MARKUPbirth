@@ -14,7 +14,9 @@
     "clean": "rm -rf .nuxt node_modules/.vite node_modules/.cache .output dist"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@pinia/nuxt": "^0.4.11",
+    "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.11.3",
@@ -29,7 +31,7 @@
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.7.4",
     "pinia": "^2.0.36",
-    "socket.io": "^4.7.2",
+    "socket.io": "^4.8.1",
     "socket.io-client": "^4.7.2",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"

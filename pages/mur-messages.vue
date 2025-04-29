@@ -54,15 +54,9 @@
     </div>
     
     <div class="container">
-      <div class="message-content">
-        <div class="form-column">
-          <div class="sticky-form">
-            <MessageForm />
-          </div>
-        </div>
-        
-        <div class="messages-column">
-          <MessageList />
+      <div class="message-content full-width">
+        <div class="form-column full-width">
+          <MessageForm />
         </div>
       </div>
     </div>
@@ -212,6 +206,7 @@ definePageMeta({
   color: #333;
   background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
   display: inline-block;
@@ -248,17 +243,44 @@ definePageMeta({
 }
 
 .message-content {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 2rem;
-  margin-top: -2rem;
-  position: relative;
-  z-index: 2;
-  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.message-content.full-width {
+  max-width: 800px;
+  margin: 0 auto 3rem;
 }
 
 .form-column {
-  position: relative;
+  flex: 1;
+}
+
+.form-column.full-width {
+  width: 100%;
+  max-width: 100%;
+}
+
+.form-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.form-subtitle {
+  color: #666;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1rem;
 }
 
 .sticky-form {

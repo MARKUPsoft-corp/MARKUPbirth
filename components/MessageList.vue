@@ -132,6 +132,7 @@ const selectedMessage = ref(null);
 
 // Set up on mount
 onMounted(() => {
+  // Charger les messages depuis le store local
   fetchMessages();
   
   // Load liked messages from localStorage
@@ -139,9 +140,6 @@ onMounted(() => {
   if (storedLikes) {
     userLikedMessages.value = JSON.parse(storedLikes);
   }
-  
-  // Set up socket listeners
-  messageStore.setupSocketListeners();
 });
 
 // Fetch messages

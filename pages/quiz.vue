@@ -67,7 +67,7 @@
               </div>
               
               <h2 class="quiz-card-title">Prêt à tester vos connaissances ?</h2>
-              <p class="quiz-description">Ce quiz comporte {{ questions.length }} questions. Voyons combien vous en connaissez !</p>
+              <p class="quiz-description">Ce quiz comporte {{ questions?.length || 0 }} questions. Voyons combien vous en connaissez !</p>
               
               <div class="form-group">
                 <label for="username" class="form-label">Entrez votre nom</label>
@@ -109,12 +109,12 @@
           <!-- Quiz questions -->
           <div v-else-if="!manualCompleted && !isQuizCompleted && currentQuestion" class="fade-in">
             <div class="question-header">
-              <span class="question-badge">Question {{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
+              <span class="question-badge">Question {{ currentQuestionIndex + 1 }} / {{ questions?.length || 0 }}</span>
             </div>
             
             <QuizCard 
               :question="currentQuestion" 
-              :is-last-question="currentQuestionIndex === questions.length - 1"
+              :is-last-question="currentQuestionIndex === (questions?.length || 0) - 1"
               @answer-selected="submitAnswer"
               @quiz-completed="completeQuiz"
             />
@@ -141,17 +141,17 @@
                 <p class="result-name">{{ username }}, vous avez obtenu:</p>
                 
                 <div class="score-display">
-                  <span class="score-value">{{ score }} / {{ questions.length }}</span>
+                  <span class="score-value">{{ score }} / {{ questions?.length || 0 }}</span>
                 </div>
                 
                 <div class="result-progress">
                   <div class="progress-track">
-                    <div class="progress-bar" :style="{width: `${(score / questions.length) * 100}%`}"></div>
+                    <div class="progress-bar" :style="{width: `${(score / (questions?.length || 1)) * 100}%`}"></div>
                   </div>
                   <div class="progress-labels">
                     <span>0</span>
-                    <span>{{ questions.length / 2 }}</span>
-                    <span>{{ questions.length }}</span>
+                    <span>{{ (questions?.length || 0) / 2 }}</span>
+                    <span>{{ questions?.length || 0 }}</span>
                   </div>
                 </div>
                 
@@ -160,13 +160,13 @@
                 </div>
                 
                 <p class="result-message">
-                  <span v-if="score === questions.length">
+                  <span v-if="score === (questions?.length || 0)">
                     <i class="bi bi-emoji-laughing"></i> Parfait ! Vous connaissez vraiment bien Emmanuel !
                   </span>
-                  <span v-else-if="score >= questions.length * 0.7">
+                  <span v-else-if="score >= (questions?.length || 0) * 0.7">
                     <i class="bi bi-emoji-smile"></i> Bravo ! Vous connaissez très bien Emmanuel !
                   </span>
-                  <span v-else-if="score >= questions.length * 0.4">
+                  <span v-else-if="score >= (questions?.length || 0) * 0.4">
                     <i class="bi bi-emoji-neutral"></i> Pas mal ! Vous connaissez assez bien Emmanuel.
                   </span>
                   <span v-else>
@@ -180,43 +180,6 @@
                     Recommencer
                   </button>
                 </div>
-              </div>
-            </div>
-            
-            <!-- Top Results -->
-            <div class="top-results-card">
-              <div class="card-header">
-                <div class="card-header-icon">
-                  <i class="bi bi-trophy"></i>
-                </div>
-                <h3 class="card-header-title">Meilleurs Scores</h3>
-              </div>
-              <div class="card-content">
-                <div v-if="topResults.length === 0" class="empty-state">
-                  <i class="bi bi-people"></i>
-                  <p>Aucun résultat pour le moment. Soyez le premier !</p>
-                </div>
-                <ul v-else class="results-list">
-                  <li 
-                    v-for="(result, index) in topResults" 
-                    :key="result.id"
-                    class="result-item"
-                    :class="{'highlighted': result.username === username}"
-                  >
-                    <div class="result-user">
-                      <span class="rank-badge" :class="{'rank-top': index < 3}">
-                        <i v-if="index === 0" class="bi bi-trophy-fill"></i>
-                        <span v-else>{{ index + 1 }}</span>
-                      </span>
-                      <strong>{{ result.username }}</strong>
-                      <span v-if="result.username === username" class="user-tag">Vous</span>
-                    </div>
-                    <div class="result-score">
-                      <span class="score-badge">{{ result.score }} / {{ questions.length }}</span>
-                      <span class="badge-name">{{ result.badge }}</span>
-                    </div>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>
@@ -246,7 +209,7 @@ const username = computed({
   get: () => quizStore.username,
   set: (value) => quizStore.setUsername(value)
 });
-const topResults = computed(() => quizStore.topResults);
+// Meilleurs scores supprimés car plus de backend
 
 // State
 const started = ref(false);
@@ -254,19 +217,14 @@ const manualCompleted = ref(false);
 
 // Fetch quiz questions
 onMounted(() => {
-  fetchQuestions();
-  fetchTopResults();
-  quizStore.setupSocketConnection();
+  // Initialisation locale des données sans utiliser d'API
+  quizStore.initializeQuiz();
+  // fetchTopResults supprimé car plus de backend
 });
 
 // Get questions
 const fetchQuestions = async () => {
   await quizStore.fetchQuestions();
-};
-
-// Get top results
-const fetchTopResults = async () => {
-  await quizStore.fetchTopResults(5);
 };
 
 // Start the quiz
@@ -292,10 +250,8 @@ const resetQuiz = () => {
 // Watcher pour détecter la fin du quiz et soumettre les résultats
 watch(isQuizCompleted, async (newValue) => {
   if (newValue === true) {
-    // Le quiz est terminé, soumettre les résultats automatiquement
+    // Le quiz est terminé, sauvegarder le résultat localement
     await quizStore.submitQuizResult();
-    // Rafraîchir les résultats
-    await fetchTopResults();
   }
 });
 
@@ -304,11 +260,8 @@ const completeQuiz = async () => {
   // Forcer l'affichage des résultats
   manualCompleted.value = true;
   
-  // Soumettre les résultats
+  // Sauvegarder le résultat localement
   await quizStore.submitQuizResult();
-  
-  // Rafraîchir les résultats
-  await fetchTopResults();
 };
 </script>
 
