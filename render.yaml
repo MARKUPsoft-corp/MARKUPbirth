@@ -5,8 +5,8 @@ services:
     name: birth-app
     env: node
     plan: free # Plan gratuit de Render
-    buildCommand: bash ./render-simple.sh
-    startCommand: NODE_ENV=production node server-static.js
+    buildCommand: bash ./api-build.sh
+    startCommand: NODE_ENV=production node backend-only.js
     envVars:
       - key: NODE_ENV
         value: production

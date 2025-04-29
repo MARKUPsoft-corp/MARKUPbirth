@@ -1,0 +1,61 @@
+// Serveur backend uniquement pour Render
+const express = require('express');
+const { spawn } = require('child_process');
+const cors = require('cors');
+
+// Configuration
+const PORT = process.env.PORT || 10000;
+const API_PORT = process.env.API_PORT || 3001;
+
+console.log('Mode API-only activé');
+
+// Créer l'application principale qui sera exposée sur Render
+const app = express();
+
+// Configurer CORS pour autoriser les requêtes depuis n'importe où (temporairement)
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Route de base pour confirmer que le serveur est en ligne
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    message: 'API server for Birth application is running',
+    time: new Date().toISOString()
+  });
+});
+
+// Démarrer le backend API sur un port local
+console.log(`Démarrage de l'API sur le port ${API_PORT}...`);
+const apiProcess = spawn('node', ['start-backend.js'], {
+  stdio: 'inherit',
+  shell: true,
+  env: { ...process.env, PORT: API_PORT }
+});
+
+// Rediriger toutes les autres requêtes vers le backend API
+app.use('/', require('http-proxy-middleware').createProxyMiddleware({
+  target: `http://localhost:${API_PORT}`,
+  changeOrigin: true
+}));
+
+// Démarrer le serveur principal
+app.listen(PORT, () => {
+  console.log(`Serveur API principal démarré sur le port ${PORT}`);
+});
+
+// Gérer les erreurs et la terminaison
+apiProcess.on('error', (error) => {
+  console.error('Erreur API:', error);
+});
+
+process.on('SIGINT', () => {
+  console.log('Arrêt des serveurs...');
+  if (apiProcess.pid) {
+    process.kill(apiProcess.pid);
+  }
+  process.exit(0);
+});
