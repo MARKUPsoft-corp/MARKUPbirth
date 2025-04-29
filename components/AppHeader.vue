@@ -9,11 +9,22 @@
         </NuxtLink>
         
         <!-- Navigation principale -->
-        <ul class="nav-links" :class="{ 'active': menuOpen }">
+        <ul class="nav-links" :class="{ 'active': menuOpen, 'locked': !timerStore.birthdayReached }">
           <li v-for="(item, index) in navItems" :key="`nav-${index}`" :style="{ '--i': index }">
-            <NuxtLink :to="item.path" @click="closeMenu" :class="{ 'router-link-active': isActiveRoute(item.path) }">
+            <!-- Désactivé si le timer n'a pas atteint zéro et que ce n'est pas l'accueil -->
+            <NuxtLink 
+              v-if="timerStore.birthdayReached || item.path === '/'"
+              :to="item.path" 
+              @click="closeMenu" 
+              :class="{ 'router-link-active': isActiveRoute(item.path) }"
+            >
               {{ item.name }}
             </NuxtLink>
+            <!-- Version désactivée du lien -->
+            <span v-else class="disabled-link" @click="showLockedMessage">
+              {{ item.name }}
+              <i class="bi bi-lock-fill"></i>
+            </span>
           </li>
         </ul>
         
@@ -31,10 +42,15 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useTimerStore } from '~/stores/timer'
 
 const route = useRoute()
+const timerStore = useTimerStore()
 const isScrolled = ref(false)
 const menuOpen = ref(false)
+const showLockedMessage = () => {
+  alert('Cette page sera disponible le jour de l\'anniversaire!')
+}
 
 const navItems = [
   { name: 'Accueil', path: '/' },
@@ -65,8 +81,9 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   handleScroll() // Check initial scroll position
   
-  // Fermer le menu au redimensionnement de la fenêtre
-  window.addEventListener('resize', closeMenu)
+  // Initialiser l'état du timer depuis localStorage et vérifier la date
+  timerStore.initFromLocalStorage()
+  timerStore.checkIfDateReached()
 })
 
 onUnmounted(() => {
@@ -134,6 +151,7 @@ header {
 .navbar-brand i {
   font-size: clamp(1.2rem, 4vw, 1.5rem);
   background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
@@ -442,5 +460,26 @@ header {
   width: 100%;
   height: 2px;
   background: var(--primary-orange);
+}
+
+/* Style pour les liens désactivés */
+.disabled-link {
+  opacity: 0.5;
+  cursor: not-allowed;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.disabled-link i {
+  margin-left: 5px;
+  font-size: 0.8em;
+}
+
+.locked .nav-links {
+  position: relative;
 }
 </style> 

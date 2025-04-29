@@ -1,5 +1,5 @@
 <template>
-  <div class="welcome-page">
+  <div class="welcome-page" :class="{ 'countdown-active': !timerStore.birthdayReached }">
     <!-- Hero Section -->
     <div class="hero-section">
       <!-- Effet de parallaxe -->
@@ -149,8 +149,8 @@
         <!-- Carte Mini-jeux -->
         <div class="feature-card games-card" v-scroll-reveal="{ delay: 400, distance: '50px', origin: 'bottom' }">
           <div class="card-content">
-            <div class="card-icon">
-              <i class="bi bi-controller"></i>
+            <div class="scroll-button" @click="scrollToCards" v-show="birthdayReached">
+              <i class="bi bi-chevron-down"></i>
             </div>
             <h3>Mini-jeux</h3>
             <p>Amusez-vous avec des jeux thématiques</p>
@@ -169,6 +169,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
+import { useTimerStore } from '~/stores/timer'
 
 const days = ref(0)
 const hours = ref(0)
@@ -179,6 +180,7 @@ let parallaxElements = []
 const titleElement = ref(null)
 const subtitleElement = ref(null)
 const cardsSection = ref(null)
+const timerStore = useTimerStore()
 
 // Calcul de la prochaine date d'anniversaire (30 avril)
 const nextBirthdayDate = computed(() => {
@@ -208,6 +210,14 @@ const updateCountdown = () => {
   // Si pour une raison quelconque le compte à rebours est négatif, réinitialiser à zéro
   if (diff < 0) {
     days.value = hours.value = minutes.value = seconds.value = 0
+    timerStore.setBirthdayReached()
+    
+    // Afficher la section des cartes avec une animation de transition
+    nextTick(() => {
+      if (cardsSection.value) {
+        cardsSection.value.classList.add('reveal')
+      }
+    })
   }
 }
 
@@ -457,9 +467,29 @@ onMounted(() => {
   parallaxElements = document.querySelectorAll('.parallax-layer')
   window.addEventListener('mousemove', handleParallax)
   
+  // Initialiser les animations
   nextTick(() => {
     initTypeAnimation()
   })
+  
+  // Vérifier si l'anniversaire est déjà atteint au chargement
+  timerStore.initFromLocalStorage()
+  timerStore.checkIfDateReached()
+  
+  // Assurer la cohérence de l'affichage
+  if (timerStore.birthdayReached) {
+    nextTick(() => {
+      if (cardsSection.value) {
+        cardsSection.value.classList.add('reveal')
+      }
+    })
+  }
+  
+  // Pour les tests: décommenter cette ligne pour simuler la fin du compteur
+  // setTimeout(() => {
+  //   timerStore.setBirthdayReached()
+  //   if (cardsSection.value) cardsSection.value.classList.add('reveal')
+  // }, 5000)
 })
 
 onUnmounted(() => {
@@ -1413,5 +1443,29 @@ onUnmounted(() => {
 
 .feature-card:hover .card-icon i {
   transform: scale(1.2) rotate(-10deg);
+}
+
+/* Styles pour le mode compteur actif */
+.countdown-active .cards-section {
+  display: none;
+}
+
+/* Animation de révélation du contenu */
+.cards-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.5s ease, transform 1.5s ease;
+}
+
+.cards-section.reveal {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Ajuster la hauteur de la section hero quand le compteur est actif */
+.countdown-active .hero-section {
+  height: 100vh;
+  min-height: 100vh;
 }
 </style> 

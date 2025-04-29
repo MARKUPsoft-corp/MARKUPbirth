@@ -16,17 +16,17 @@ import type { QuizQuestion } from '~/stores/quiz';
 export const quizQuestions: QuizQuestion[] = [
   {
     id: 1,
-    question: "Quelle est la date de naissance d'Emmanuel ?",
-    options: ["1er janvier", "15 mars", "30 avril", "22 décembre"],
+    question: "Quelle est ma date de naissance ?",
+    options: ["1er janvier 1998", "15 mars 2000", "30 avril 2001", "22 décembre 2003"],
     answer: 2,
-    explanation: "Emmanuel est né le 30 avril.",
+    explanation: "Je suis est né le 30 avril 2001.",
     category: "Personnel",
     difficulty: "facile"
   },
   {
     id: 2,
-    question: "Quel est le plat préféré d'Emmanuel ?",
-    options: ["Pizza", "Poulet DG", "Sushi", "Lasagnes"],
+    question: "Quel mon plat préféré ?",
+    options: ["Pizza", "Koki", "Taro", "Hambuger"],
     answer: 1,
     explanation: "Le Poulet DG (Directeur Général) est un plat traditionnel camerounais très apprécié d'Emmanuel.",
     category: "Gastronomie",

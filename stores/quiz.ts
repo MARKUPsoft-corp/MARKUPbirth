@@ -70,7 +70,7 @@ export const useQuizStore = defineStore('quiz', () => {
   
   // Configuration du quiz
   const quizConfig = {
-    questionsPerQuiz: 6, // Nombre de questions par quiz - facilement modifiable
+    questionsPerQuiz: 8, // Nombre de questions par quiz - facilement modifiable
     shuffleQuestions: true // Mélanger les questions - facilement modifiable
   };
   
