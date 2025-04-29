@@ -2,8 +2,8 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
 export const useTimerStore = defineStore('timer', () => {
-  // État pour savoir si l'anniversaire est atteint
-  const birthdayReached = ref(false);
+  // C'est le grand jour ! 30 avril 2025
+  const birthdayReached = ref(true);
   
   // Fonction pour marquer l'anniversaire comme atteint
   const setBirthdayReached = () => {

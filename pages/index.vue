@@ -44,49 +44,36 @@
             Bienvenue sur le site d'anniversaire d'<span class="highlight-name">Emma le BG</span>
           </p>
           
-          <!-- Compteur 3D -->
-          <div class="countdown-3d">
-            <div class="countdown-container">
-              <div class="countdown-item glass-effect desktop-only">
-                <div class="countdown-number-3d">
-                  <div class="number-wrapper">
-                    <span class="number-content">{{ days }}</span>
-                  </div>
-                </div>
-                <span class="countdown-label">Jours</span>
-              </div>
-              <div class="countdown-item glass-effect desktop-only">
-                <div class="countdown-number-3d">
-                  <div class="number-wrapper">
-                    <span class="number-content">{{ hours }}</span>
-                  </div>
-                </div>
-                <span class="countdown-label">Heures</span>
-              </div>
-              <div class="countdown-item glass-effect">
-                <div class="countdown-number-3d">
-                  <div class="number-wrapper">
-                    <span class="number-content">{{ minutes }}</span>
-                  </div>
-                </div>
-                <span class="countdown-label">Minutes</span>
-              </div>
-              <div class="countdown-item glass-effect">
-                <div class="countdown-number-3d">
-                  <div class="number-wrapper">
-                    <span class="number-content">{{ seconds }}</span>
-                  </div>
-                </div>
-                <span class="countdown-label">Secondes</span>
-              </div>
+          <!-- Message spécial pour le jour J -->
+          <div class="birthday-message">
+            <div class="celebration-text">
+              <span class="celebration-icon">🎉</span>
+              <h2 class="celebration-title">C'est le grand jour !</h2>
+              <span class="celebration-icon">🎉</span>
             </div>
+            <div class="celebration-subtitle">30 avril 2025</div>
           </div>
           
-          <!-- Call to action -->
+          <!-- Confetti animation -->
+          <div class="confetti-container special-day">
+            <div v-for="n in 50" :key="`celebration-confetti-${n}`" 
+                 class="celebration-confetti" 
+                 :style="{
+                   '--delay': `${Math.random() * 5}s`,
+                   '--size': `${Math.random() * 0.7 + 0.3}rem`,
+                   '--color': `var(--${['primary-green', 'primary-orange', 'accent-blue', 'accent-purple'][Math.floor(Math.random() * 4)]})`,
+                   '--pos-x': `${Math.random() * 100}vw`,
+                   '--speed': `${Math.random() * 10 + 5}s`,
+                   '--spin': `${Math.random() * 360}deg`
+                 }"
+            ></div>
+          </div>
+          
+          <!-- CTA Button -->
           <div class="cta-container">
-            <button class="cta-button primary" @click="scrollToCards">
-              <span>Explorer</span>
-              <i class="bi bi-arrow-down-circle"></i>
+            <button class="cta-button birthday-cta" @click="scrollToCards">
+              <span>Célébrer</span>
+              <i class="bi bi-stars"></i>
             </button>
           </div>
         </div>
@@ -1564,6 +1551,108 @@ onUnmounted(() => {
 /* Styles pour le mode compteur actif */
 .countdown-active .cards-section {
   display: none;
+}
+
+/* Styles pour le message de célébration */
+.birthday-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.celebration-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  animation: pulse 2s infinite;
+}
+
+.celebration-icon {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  margin: 0 0.5rem;
+  animation: bounce 2s infinite alternate;
+}
+
+.celebration-title {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 0 15px rgba(var(--primary-green-rgb), 0.8), 
+              0 0 25px rgba(var(--primary-orange-rgb), 0.8);
+  margin: 0;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.celebration-subtitle {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: white;
+  opacity: 0.9;
+  margin-top: 0.5rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.birthday-cta {
+  background: linear-gradient(45deg, var(--primary-green), var(--primary-orange));
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+  margin-top: 1rem;
+  border: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  transform: scale(1.1);
+}
+
+.birthday-cta:hover {
+  transform: scale(1.15) translateY(-5px);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+}
+
+.celebration-confetti {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  background-color: var(--color);
+  top: -5px;
+  left: var(--pos-x);
+  opacity: 0;
+  transform: rotate(var(--spin));
+  animation: celebrationFall var(--speed) ease-in-out infinite;
+  animation-delay: var(--delay);
+  z-index: 1;
+}
+
+@keyframes celebrationFall {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) rotate(var(--spin));
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(calc(var(--spin) + 360deg));
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Animation de révélation du contenu */
