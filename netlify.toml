@@ -1,0 +1,16 @@
+[build]
+  command = "npm run generate"
+  publish = "dist"
+  
+[build.environment]
+  NODE_VERSION = "16"
+
+# Configuration des redirects pour gérer les routes SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Variables d'environnement pour la production
+[context.production.environment]
+  API_URL = "https://birth-app.onrender.com"  # Mettez à jour avec l'URL de votre API sur Render
