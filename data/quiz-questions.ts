@@ -1,4 +1,4 @@
-import { QuizQuestion } from '~/stores/quiz';
+import type { QuizQuestion } from '~/stores/quiz';
 
 /**
  * Base de données de questions pour le quiz.
