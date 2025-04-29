@@ -96,8 +96,16 @@ setTimeout(() => {
     
     // Servir les fichiers statiques générés par Nuxt
     if (staticPath) {
-      app.use(express.static(staticPath));
+      // Servir les fichiers statiques principaux
+      app.use(express.static(path.join(__dirname, '.output/public')));
+      
+      // Si les assets Nuxt sont dans .nuxt/dist/client, les servir sous le préfixe /_nuxt
+      if (staticPath.includes('.nuxt/dist/client')) {
+        app.use('/_nuxt', express.static(staticPath));
+      }
+      
       console.log(`Servir les fichiers statiques depuis: ${staticPath}`);
+      console.log(`Et les assets principaux depuis: ${path.join(__dirname, '.output/public')}`);
     } else {
       console.warn('Aucun répertoire statique trouvé!');
     }
