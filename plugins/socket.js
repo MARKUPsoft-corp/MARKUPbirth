@@ -3,8 +3,23 @@ import { io } from 'socket.io-client';
 import { getApiUrl, getSocketConfig } from '../api.config';
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const socketConfig = getSocketConfig();
-  const socket = io(socketConfig.url, socketConfig.options);
+  // Déterminer l'URL du serveur Socket.IO
+  let socketUrl = 'https://birth-app.onrender.com';
+  
+  // En développement local uniquement, utiliser localhost
+  if (typeof window !== 'undefined' && 
+      !window.location.hostname.includes('netlify') && 
+      process.env.NODE_ENV !== 'production') {
+    socketUrl = 'http://localhost:3001';
+  }
+  
+  console.log(`Connexion Socket.IO à: ${socketUrl}`);
+  
+  // Configurer Socket.IO avec l'URL forcée
+  const socket = io(socketUrl, {
+    transports: ['websocket', 'polling'],
+    autoConnect: true
+  });
   
   // Rendre le socket disponible dans toute l'application
   nuxtApp.provide('socket', socket);

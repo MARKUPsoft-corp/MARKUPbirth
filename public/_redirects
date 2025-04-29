@@ -1,0 +1,6 @@
+# Redirection pour SPA (Single Page Application)
+/*    /index.html   200
+
+# Redirection des appels API vers Render
+/api/*  https://birth-app.onrender.com/:splat  200
+/socket.io/*  https://birth-app.onrender.com/socket.io/:splat  200
