@@ -1,13 +1,26 @@
 // API server minimaliste pour Render
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
 
 // Configuration
 const PORT = process.env.PORT || 10000;
 console.log(`Démarrage du serveur API sur le port ${PORT}`);
 
-// Créer l'application
+// Créer l'application Express et le serveur HTTP
 const app = express();
+const server = http.createServer(app);
+
+// Créer le serveur Socket.IO avec CORS configuré
+const io = new Server(server, {
+  cors: {
+    origin: ['https://markupbirt.netlify.app', 'https://markupbirth.netlify.app', 'https://birth-6syx.netlify.app', 'http://localhost:3000'],
+    methods: ['GET', 'POST'],
+    credentials: true
+  },
+  transports: ['websocket', 'polling']
+});
 
 // Configuration CORS
 app.use(cors({
@@ -63,8 +76,8 @@ const quiz = [
 
 // Résultats du quiz
 const quizResults = [
-  { id: 1, userName: "Alice", score: 85, timestamp: new Date().toISOString() },
-  { id: 2, userName: "Bob", score: 92, timestamp: new Date().toISOString() }
+  { id: 1, username: "Alice", score: 85, timestamp: new Date().toISOString() },
+  { id: 2, username: "Bob", score: 92, timestamp: new Date().toISOString() }
 ];
 
 // Route principale
@@ -107,7 +120,33 @@ app.get('/api/quiz/results/top', (req, res) => {
   res.json(quizResults.slice(0, limit));
 });
 
-// Démarrer le serveur
-app.listen(PORT, () => {
+// Configuration des événements Socket.IO
+io.on('connection', (socket) => {
+  console.log(`Nouvelle connexion Socket.IO: ${socket.id}`);
+  
+  // Envoyer un message de bienvenue
+  socket.emit('welcome', { message: 'Bienvenue sur le serveur Socket.IO!' });
+  
+  // Écouter les messages
+  socket.on('message', (data) => {
+    console.log(`Message reçu: ${JSON.stringify(data)}`);
+    // Diffuser le message à tous les clients
+    io.emit('message', {
+      id: Date.now(),
+      author: data.author || 'Anonyme',
+      content: data.content,
+      timestamp: new Date().toISOString(),
+      likes: 0
+    });
+  });
+  
+  // Gérer la déconnexion
+  socket.on('disconnect', () => {
+    console.log(`Déconnexion Socket.IO: ${socket.id}`);
+  });
+});
+
+// Démarrer le serveur HTTP (qui inclut Socket.IO)
+server.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);
 });
